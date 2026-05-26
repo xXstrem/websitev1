@@ -1,0 +1,408 @@
+{
+  "common": {
+    "appName": "Ton Cloud",
+    "tagline": "Premium Cloud Infrastructure",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "contactUs": "Contact Us",
+    "viewAll": "View All",
+    "readMore": "Read More",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "error": "An error occurred",
+    "success": "Success",
+    "confirm": "Confirm",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and",
+    "all": "All",
+    "none": "None",
+    "selectOption": "Select an option",
+    "required": "Required",
+    "optional": "Optional",
+    "status": "Status",
+    "actions": "Actions",
+    "details": "Details",
+    "date": "Date",
+    "time": "Time",
+    "price": "Price",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "discount": "Discount",
+    "free": "Free",
+    "month": "month",
+    "year": "year",
+    "perMonth": "/month",
+    "perYear": "/year",
+    "orderNow": "Order Now",
+    "buyNow": "Buy Now",
+    "addToCart": "Add to Cart",
+    "checkout": "Checkout",
+    "pay": "Pay",
+    "download": "Download",
+    "upload": "Upload",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "share": "Share",
+    "print": "Print"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "vps": "VPS Hosting",
+    "dedicated": "Dedicated Servers",
+    "shared": "Shared Hosting",
+    "domains": "Domains",
+    "gameServers": "Game Servers",
+    "ssl": "SSL Certificates",
+    "pricing": "Pricing",
+    "about": "About Us",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "status": "System Status",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "profile": "Profile",
+    "settings": "Settings",
+    "admin": "Admin Panel"
+  },
+  "home": {
+    "hero": {
+      "title": "Premium Cloud Infrastructure for Your Business",
+      "subtitle": "High-performance VPS, dedicated servers, and hosting solutions with enterprise-grade reliability and 24/7 support.",
+      "cta": "Get Started Now",
+      "secondaryCta": "View Pricing",
+      "features": {
+        "uptime": "99.9% Uptime",
+        "support": "24/7 Support",
+        "security": "Enterprise Security"
+      }
+    },
+    "whyChoose": {
+      "title": "Why Choose Ton Cloud",
+      "subtitle": "We provide enterprise-grade infrastructure with unmatched performance and reliability.",
+      "features": {
+        "performance": {
+          "title": "High Performance",
+          "description": "NVMe SSD storage and premium hardware for blazing fast speeds."
+        },
+        "reliability": {
+          "title": "99.9% Uptime",
+          "description": "Enterprise-grade infrastructure with redundant systems."
+        },
+        "security": {
+          "title": "Advanced Security",
+          "description": "DDoS protection, firewalls, and regular security audits."
+        },
+        "support": {
+          "title": "24/7 Support",
+          "description": "Expert technical support available around the clock."
+        },
+        "flexibility": {
+          "title": "Flexible Scaling",
+          "description": "Easily scale resources as your business grows."
+        },
+        "pricing": {
+          "title": "Transparent Pricing",
+          "description": "No hidden fees. What you see is what you pay."
+        }
+      }
+    },
+    "services": {
+      "title": "Our Services",
+      "subtitle": "Complete hosting solutions for every need",
+      "vps": {
+        "title": "VPS Hosting",
+        "description": "Virtual private servers with dedicated resources and full root access.",
+        "from": "From $4.99/month"
+      },
+      "dedicated": {
+        "title": "Dedicated Servers",
+        "description": "Powerful bare metal servers for maximum performance.",
+        "from": "From $79.99/month"
+      },
+      "shared": {
+        "title": "Shared Hosting",
+        "description": "Affordable hosting perfect for small websites.",
+        "from": "From $2.99/month"
+      },
+      "domains": {
+        "title": "Domains",
+        "description": "Register your perfect domain name.",
+        "from": "From $9.99/year"
+      },
+      "game": {
+        "title": "Game Servers",
+        "description": "Low-latency game servers for the best gaming experience.",
+        "from": "From $5.99/month"
+      },
+      "ssl": {
+        "title": "SSL Certificates",
+        "description": "Secure your website with trusted SSL certificates.",
+        "from": "From $9.99/year"
+      }
+    },
+    "stats": {
+      "title": "Trusted by Businesses Worldwide",
+      "servers": "Servers Online",
+      "customers": "Happy Customers",
+      "countries": "Data Centers",
+      "uptime": "Uptime"
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Deploy your first server in minutes with our easy setup process.",
+      "button": "Start Free Trial"
+    }
+  },
+  "vps": {
+    "title": "VPS Hosting Plans",
+    "subtitle": "High-performance virtual private servers with dedicated resources",
+    "features": {
+      "title": "All Plans Include",
+      "ssd": "NVMe SSD Storage",
+      "ram": "Dedicated RAM",
+      "cpu": "Dedicated CPU Cores",
+      "traffic": "Unlimited Traffic",
+      "ipv4": "1 IPv4 Address",
+      "ipv6": "/64 IPv6 Subnet",
+      "backup": "Weekly Backups",
+      "support": "24/7 Technical Support",
+      "panel": "Control Panel Access",
+      "reboot": "Instant Reboot",
+      "os": "Multiple OS Options"
+    },
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "description": "Perfect for small projects"
+      },
+      "basic": {
+        "name": "Basic",
+        "description": "Great for growing websites"
+      },
+      "professional": {
+        "name": "Professional",
+        "description": "For demanding applications"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "Maximum performance"
+      }
+    },
+    "specs": {
+      "cpu": "CPU",
+      "ram": "RAM",
+      "storage": "Storage",
+      "bandwidth": "Bandwidth",
+      "cores": "cores"
+    }
+  },
+  "domains": {
+    "title": "Domain Registration",
+    "subtitle": "Find your perfect domain name",
+    "search": {
+      "placeholder": "Enter your domain name",
+      "button": "Search",
+      "available": "Available",
+      "taken": "Taken"
+    },
+    "extensions": {
+      "title": "Popular Extensions",
+      "com": ".com",
+      "net": ".net",
+      "org": ".org",
+      "cloud": ".cloud",
+      "io": ".io"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're here to help. Get in touch with our team.",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "telegram": "Telegram",
+      "discord": "Discord",
+      "support": "Support Hours"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account",
+      "email": "Email Address",
+      "password": "Password",
+      "remember": "Remember me",
+      "forgot": "Forgot password?",
+      "button": "Sign In",
+      "noAccount": "Don't have an account?",
+      "register": "Create an account"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Get started with Ton Cloud",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "terms": "I agree to the Terms of Service and Privacy Policy",
+      "button": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign In"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back",
+    "overview": {
+      "title": "Overview",
+      "activeServices": "Active Services",
+      "pendingOrders": "Pending Orders",
+      "openTickets": "Open Tickets",
+      "totalInvoices": "Total Invoices"
+    },
+    "orders": {
+      "title": "My Orders",
+      "orderNumber": "Order #",
+      "service": "Service",
+      "amount": "Amount",
+      "status": "Status",
+      "date": "Date",
+      "empty": "No orders yet"
+    },
+    "services": {
+      "title": "My Services",
+      "name": "Service Name",
+      "type": "Type",
+      "status": "Status",
+      "expiry": "Expiry Date",
+      "actions": "Actions",
+      "empty": "No active services"
+    },
+    "invoices": {
+      "title": "Invoices",
+      "invoiceNumber": "Invoice #",
+      "amount": "Amount",
+      "status": "Status",
+      "due": "Due Date",
+      "pay": "Pay Now",
+      "empty": "No invoices"
+    },
+    "tickets": {
+      "title": "Support Tickets",
+      "subject": "Subject",
+      "priority": "Priority",
+      "status": "Status",
+      "created": "Created",
+      "new": "New Ticket",
+      "empty": "No tickets"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "personal": "Personal Information",
+      "security": "Security",
+      "notifications": "Notifications"
+    },
+    "settings": {
+      "title": "Settings"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "dashboard": {
+      "title": "Dashboard",
+      "totalUsers": "Total Users",
+      "totalOrders": "Total Orders",
+      "totalRevenue": "Total Revenue",
+      "openTickets": "Open Tickets"
+    },
+    "users": {
+      "title": "Users",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "joined": "Joined"
+    },
+    "orders": {
+      "title": "Orders",
+      "manage": "Manage Orders",
+      "approve": "Approve Payment",
+      "deliver": "Deliver Service",
+      "reject": "Reject"
+    },
+    "services": {
+      "title": "Services",
+      "manage": "Manage Services"
+    },
+    "products": {
+      "title": "Products",
+      "manage": "Manage Products"
+    },
+    "payments": {
+      "title": "Payments",
+      "pending": "Pending Approval",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "tickets": {
+      "title": "Tickets",
+      "manage": "Manage Tickets"
+    },
+    "settings": {
+      "title": "Settings"
+    }
+  },
+  "legal": {
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "refund": "Refund Policy"
+  },
+  "footer": {
+    "company": "Company",
+    "services": "Services",
+    "support": "Support",
+    "legal": "Legal",
+    "social": "Follow Us",
+    "copyright": "© 2024 Ton Cloud. All rights reserved.",
+    "description": "Premium cloud infrastructure for businesses worldwide."
+  },
+  "errors": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "password": "Password must be at least 8 characters",
+    "passwordMatch": "Passwords do not match",
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to access this resource",
+    "notFound": "Page not found",
+    "server": "Server error. Please try again later."
+  }
+}
