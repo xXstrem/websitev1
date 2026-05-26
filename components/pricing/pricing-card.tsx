@@ -12,6 +12,7 @@ interface PricingCardProps {
   name: string;
   description: string;
   price: number;
+  currency?: string;
   features: string[];
   popular?: boolean;
   index: number;
@@ -28,6 +29,7 @@ export default function PricingCard({
   name,
   description,
   price,
+  currency = 'IQD',
   features,
   popular,
   index,
@@ -55,8 +57,8 @@ export default function PricingCard({
         <CardContent className="flex-1 space-y-6">
           <div className="text-center">
             <div className="flex items-baseline justify-center gap-1">
-              <span className="text-4xl font-bold">${price}</span>
-              <span className="text-muted-foreground">{t('common.perMonth')}</span>
+              <span className="text-4xl font-bold">{price.toLocaleString()}</span>
+              <span className="text-muted-foreground">{currency}{t('common.perMonth')}</span>
             </div>
           </div>
 

@@ -1,15 +1,14 @@
 {
   "common": {
     "appName": "Ton Cloud",
-    "tagline": "Premium Cloud Infrastructure",
+    "tagline": "بنية تحتية سحابية متميزة",
+    "currency": "IQD",
     "learnMore": "Learn More",
     "getStarted": "Get Started",
     "contactUs": "Contact Us",
     "viewAll": "View All",
     "readMore": "Read More",
     "search": "Search",
-    "filter": "Filter",
-    "sort": "Sort",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -28,38 +27,18 @@
     "yes": "Yes",
     "no": "No",
     "or": "or",
-    "and": "and",
     "all": "All",
-    "none": "None",
-    "selectOption": "Select an option",
-    "required": "Required",
-    "optional": "Optional",
     "status": "Status",
     "actions": "Actions",
     "details": "Details",
     "date": "Date",
-    "time": "Time",
     "price": "Price",
     "total": "Total",
-    "subtotal": "Subtotal",
-    "tax": "Tax",
-    "discount": "Discount",
-    "free": "Free",
-    "month": "month",
-    "year": "year",
     "perMonth": "/month",
     "perYear": "/year",
     "orderNow": "Order Now",
-    "buyNow": "Buy Now",
-    "addToCart": "Add to Cart",
-    "checkout": "Checkout",
-    "pay": "Pay",
-    "download": "Download",
-    "upload": "Upload",
     "copy": "Copy",
-    "copied": "Copied!",
-    "share": "Share",
-    "print": "Print"
+    "copied": "Copied!"
   },
   "nav": {
     "home": "Home",
@@ -87,7 +66,7 @@
   "home": {
     "hero": {
       "title": "Premium Cloud Infrastructure for Your Business",
-      "subtitle": "High-performance VPS, dedicated servers, and hosting solutions with enterprise-grade reliability and 24/7 support.",
+      "subtitle": "High-performance VPS, dedicated servers, and hosting solutions with enterprise-grade reliability and 24/7 support. Trusted by thousands of businesses worldwide.",
       "cta": "Get Started Now",
       "secondaryCta": "View Pricing",
       "features": {
@@ -102,27 +81,27 @@
       "features": {
         "performance": {
           "title": "High Performance",
-          "description": "NVMe SSD storage and premium hardware for blazing fast speeds."
+          "description": "NVMe SSD storage and premium hardware for blazing fast speeds and optimal performance."
         },
         "reliability": {
           "title": "99.9% Uptime",
-          "description": "Enterprise-grade infrastructure with redundant systems."
+          "description": "Enterprise-grade infrastructure with redundant systems ensuring maximum availability."
         },
         "security": {
           "title": "Advanced Security",
-          "description": "DDoS protection, firewalls, and regular security audits."
+          "description": "DDoS protection, firewalls, and regular security audits to keep your data safe."
         },
         "support": {
           "title": "24/7 Support",
-          "description": "Expert technical support available around the clock."
+          "description": "Expert technical support available around the clock in both Arabic and English."
         },
         "flexibility": {
           "title": "Flexible Scaling",
-          "description": "Easily scale resources as your business grows."
+          "description": "Easily scale resources as your business grows without any downtime."
         },
         "pricing": {
           "title": "Transparent Pricing",
-          "description": "No hidden fees. What you see is what you pay."
+          "description": "No hidden fees. Competitive prices in Iraqi Dinar with clear billing."
         }
       }
     },
@@ -132,32 +111,32 @@
       "vps": {
         "title": "VPS Hosting",
         "description": "Virtual private servers with dedicated resources and full root access.",
-        "from": "From $4.99/month"
+        "from": "From 7,500 IQD/month"
       },
       "dedicated": {
         "title": "Dedicated Servers",
         "description": "Powerful bare metal servers for maximum performance.",
-        "from": "From $79.99/month"
+        "from": "From 120,000 IQD/month"
       },
       "shared": {
         "title": "Shared Hosting",
         "description": "Affordable hosting perfect for small websites.",
-        "from": "From $2.99/month"
+        "from": "From 4,500 IQD/month"
       },
       "domains": {
         "title": "Domains",
         "description": "Register your perfect domain name.",
-        "from": "From $9.99/year"
+        "from": "From 15,000 IQD/year"
       },
       "game": {
         "title": "Game Servers",
         "description": "Low-latency game servers for the best gaming experience.",
-        "from": "From $5.99/month"
+        "from": "From 9,000 IQD/month"
       },
       "ssl": {
         "title": "SSL Certificates",
         "description": "Secure your website with trusted SSL certificates.",
-        "from": "From $9.99/year"
+        "from": "From 15,000 IQD/year"
       }
     },
     "stats": {
@@ -167,10 +146,58 @@
       "countries": "Data Centers",
       "uptime": "Uptime"
     },
+    "testimonials": {
+      "title": "What Our Customers Say",
+      "subtitle": "Real reviews from real customers"
+    },
     "cta": {
       "title": "Ready to Get Started?",
       "subtitle": "Deploy your first server in minutes with our easy setup process.",
       "button": "Start Free Trial"
+    },
+    "process": {
+      "title": "How It Works",
+      "subtitle": "Get started in 3 simple steps",
+      "step1": {
+        "title": "Choose Your Service",
+        "description": "Browse our wide range of hosting solutions and select the perfect plan for your needs."
+      },
+      "step2": {
+        "title": "Place Your Order",
+        "description": "Complete your order with our secure payment process. We support multiple payment methods."
+      },
+      "step3": {
+        "title": "Get Started",
+        "description": "Receive your service credentials instantly and start building your online presence."
+      }
+    },
+    "features": {
+      "title": "Powerful Features",
+      "subtitle": "Everything you need to succeed online",
+      "ddos": {
+        "title": "DDoS Protection",
+        "description": "Advanced protection against DDoS attacks ensuring your services stay online."
+      },
+      "backup": {
+        "title": "Daily Backups",
+        "description": "Automatic daily backups with easy restore options to protect your data."
+      },
+      "monitoring": {
+        "title": "24/7 Monitoring",
+        "description": "Continuous server monitoring with instant alerts and automatic recovery."
+      },
+      "panel": {
+        "title": "Control Panel",
+        "description": " intuitive control panel to manage all your services in one place."
+      },
+      "ssl": {
+        "title": "Free SSL",
+        "description": "Free SSL certificates for all hosting plans to secure your website."
+      },
+      "migration": {
+        "title": "Free Migration",
+        "description": "We'll migrate your existing services to our platform at no extra cost."
+      }
     }
   },
   "vps": {
@@ -190,30 +217,38 @@
       "reboot": "Instant Reboot",
       "os": "Multiple OS Options"
     },
-    "plans": {
-      "starter": {
-        "name": "Starter",
-        "description": "Perfect for small projects"
-      },
-      "basic": {
-        "name": "Basic",
-        "description": "Great for growing websites"
-      },
-      "professional": {
-        "name": "Professional",
-        "description": "For demanding applications"
-      },
-      "enterprise": {
-        "name": "Enterprise",
-        "description": "Maximum performance"
-      }
-    },
     "specs": {
       "cpu": "CPU",
       "ram": "RAM",
       "storage": "Storage",
       "bandwidth": "Bandwidth",
       "cores": "cores"
+    }
+  },
+  "dedicated": {
+    "title": "Dedicated Servers",
+    "subtitle": "Bare metal performance for your most demanding workloads",
+    "features": {
+      "title": "Dedicated Server Features",
+      "hardware": "Enterprise Hardware",
+      "network": "10Gbps Network",
+      "power": "Redundant Power",
+      "remote": "IPMI Remote Management",
+      "custom": "Custom Configuration",
+      "raid": "RAID Storage Options"
+    }
+  },
+  "shared": {
+    "title": "Shared Hosting",
+    "subtitle": "Affordable hosting for your website",
+    "features": {
+      "title": "Shared Hosting Features",
+      "cpanel": "cPanel Control Panel",
+      "email": "Email Accounts",
+      "ssl": "Free SSL Certificate",
+      "domain": "Free Domain (Annual)",
+      "backup": "Daily Backups",
+      "migration": "Free Migration"
     }
   },
   "domains": {
@@ -226,12 +261,41 @@
       "taken": "Taken"
     },
     "extensions": {
-      "title": "Popular Extensions",
-      "com": ".com",
-      "net": ".net",
-      "org": ".org",
-      "cloud": ".cloud",
-      "io": ".io"
+      "title": "Popular Extensions"
+    }
+  },
+  "game": {
+    "title": "Game Server Hosting",
+    "subtitle": "Low-latency servers for the ultimate gaming experience"
+  },
+  "ssl": {
+    "title": "SSL Certificates",
+    "subtitle": "Secure your website with trusted SSL certificates",
+    "features": {
+      "title": "SSL Certificate Features"
+    }
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "No hidden fees. Choose the plan that fits your needs."
+  },
+  "about": {
+    "title": "About Ton Cloud",
+    "subtitle": "Your trusted partner in cloud infrastructure",
+    "story": {
+      "title": "Our Story",
+      "content": "Founded with a mission to provide reliable, high-performance cloud infrastructure at competitive prices."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "content": "To empower businesses of all sizes with enterprise-grade cloud solutions."
+    },
+    "values": {
+      "title": "Our Values",
+      "integrity": "Integrity",
+      "innovation": "Innovation",
+      "excellence": "Excellence",
+      "transparency": "Transparency"
     }
   },
   "contact": {
@@ -251,6 +315,19 @@
       "discord": "Discord",
       "support": "Support Hours"
     }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about our services"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Latest news, tutorials, and insights"
+  },
+  "legal": {
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "refund": "Refund Policy"
   },
   "auth": {
     "login": {
@@ -276,6 +353,22 @@
       "button": "Create Account",
       "hasAccount": "Already have an account?",
       "login": "Sign In"
+    },
+    "forgot": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email to reset your password",
+      "email": "Email Address",
+      "button": "Send Reset Link",
+      "back": "Back to Login",
+      "success": "Password reset link sent to your email",
+      "checkEmail": "Check your email"
+    },
+    "reset": {
+      "title": "Reset Password",
+      "subtitle": "Enter your new password",
+      "password": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "button": "Reset Password"
     }
   },
   "dashboard": {
@@ -299,36 +392,15 @@
     },
     "services": {
       "title": "My Services",
-      "name": "Service Name",
-      "type": "Type",
-      "status": "Status",
-      "expiry": "Expiry Date",
-      "actions": "Actions",
       "empty": "No active services"
     },
     "invoices": {
       "title": "Invoices",
-      "invoiceNumber": "Invoice #",
-      "amount": "Amount",
-      "status": "Status",
-      "due": "Due Date",
-      "pay": "Pay Now",
       "empty": "No invoices"
     },
     "tickets": {
       "title": "Support Tickets",
-      "subject": "Subject",
-      "priority": "Priority",
-      "status": "Status",
-      "created": "Created",
-      "new": "New Ticket",
       "empty": "No tickets"
-    },
-    "profile": {
-      "title": "Profile Settings",
-      "personal": "Personal Information",
-      "security": "Security",
-      "notifications": "Notifications"
     },
     "settings": {
       "title": "Settings"
@@ -342,55 +414,13 @@
       "totalOrders": "Total Orders",
       "totalRevenue": "Total Revenue",
       "openTickets": "Open Tickets"
-    },
-    "users": {
-      "title": "Users",
-      "name": "Name",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "joined": "Joined"
-    },
-    "orders": {
-      "title": "Orders",
-      "manage": "Manage Orders",
-      "approve": "Approve Payment",
-      "deliver": "Deliver Service",
-      "reject": "Reject"
-    },
-    "services": {
-      "title": "Services",
-      "manage": "Manage Services"
-    },
-    "products": {
-      "title": "Products",
-      "manage": "Manage Products"
-    },
-    "payments": {
-      "title": "Payments",
-      "pending": "Pending Approval",
-      "approved": "Approved",
-      "rejected": "Rejected"
-    },
-    "tickets": {
-      "title": "Tickets",
-      "manage": "Manage Tickets"
-    },
-    "settings": {
-      "title": "Settings"
     }
-  },
-  "legal": {
-    "terms": "Terms of Service",
-    "privacy": "Privacy Policy",
-    "refund": "Refund Policy"
   },
   "footer": {
     "company": "Company",
     "services": "Services",
     "support": "Support",
     "legal": "Legal",
-    "social": "Follow Us",
     "copyright": "© 2024 Ton Cloud. All rights reserved.",
     "description": "Premium cloud infrastructure for businesses worldwide."
   },
@@ -398,11 +428,6 @@
     "required": "This field is required",
     "email": "Please enter a valid email address",
     "password": "Password must be at least 8 characters",
-    "passwordMatch": "Passwords do not match",
-    "generic": "Something went wrong. Please try again.",
-    "network": "Network error. Please check your connection.",
-    "unauthorized": "You are not authorized to access this resource",
-    "notFound": "Page not found",
-    "server": "Server error. Please try again later."
+    "generic": "Something went wrong. Please try again."
   }
 }
