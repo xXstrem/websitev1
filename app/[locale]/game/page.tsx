@@ -8,13 +8,14 @@ import { motion } from 'framer-motion';
 import { Check, Gamepad2, Zap, Shield, Users, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
 
 const gamePlans = [
   {
     name: 'Starter',
     price: 9000,
     slots: '10 Slots',
-    specs: { cpu: '2 vCPU', ram: '2 GB', storage: '50 GB NVMe' },
+    specs: { cpu: '2 vCPU', ram: '4 GB', storage: '50 GB NVMe' },
     features: ['DDoS Protection', 'Instant Setup', 'Control Panel', 'Mod Support', '24/7 Support'],
     popular: false,
   },
@@ -22,7 +23,7 @@ const gamePlans = [
     name: 'Basic',
     price: 18000,
     slots: '20 Slots',
-    specs: { cpu: '4 vCPU', ram: '4 GB', storage: '100 GB NVMe' },
+    specs: { cpu: '4 vCPU', ram: '8 GB', storage: '100 GB NVMe' },
     features: ['DDoS Protection', 'Instant Setup', 'Control Panel', 'Mod Support', '24/7 Support', 'Automatic Backups'],
     popular: true,
   },
@@ -30,7 +31,7 @@ const gamePlans = [
     name: 'Pro',
     price: 35000,
     slots: '50 Slots',
-    specs: { cpu: '8 vCPU', ram: '8 GB', storage: '200 GB NVMe' },
+    specs: { cpu: '8 vCPU', ram: '16 GB', storage: '200 GB NVMe' },
     features: ['DDoS Protection', 'Instant Setup', 'Control Panel', 'Mod Support', '24/7 Support', 'Automatic Backups', 'Priority Support'],
     popular: false,
   },
@@ -38,7 +39,7 @@ const gamePlans = [
     name: 'Elite',
     price: 65000,
     slots: '100 Slots',
-    specs: { cpu: '16 vCPU', ram: '16 GB', storage: '400 GB NVMe' },
+    specs: { cpu: '16 vCPU', ram: '32 GB', storage: '400 GB NVMe' },
     features: ['DDoS Protection', 'Instant Setup', 'Control Panel', 'Full Mod Support', '24/7 Support', 'Daily Backups', 'Priority Support', 'Dedicated Resources'],
     popular: false,
   },
@@ -138,9 +139,11 @@ export default function GamePage() {
                           ))}
                         </ul>
                       </div>
-                      <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
-                        {t('common.orderNow')}
-                      </Button>
+                      <Link href={`/order/game/${plan.name.toLowerCase()}`}>
+                        <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
+                          {t('common.orderNow')}
+                        </Button>
+                      </Link>
                     </CardContent>
                   </Card>
                 </motion.div>

@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { Check, Shield, Lock, Award, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
 
 const sslPlans = [
   {
@@ -15,7 +16,7 @@ const sslPlans = [
     price: 15000,
     validation: 'Domain Validation',
     issuance: 'Minutes',
-    warranty: '$10,000',
+    warranty: 'IQD 15,000,000',
     features: ['Single Domain', 'Domain Validation', 'Quick Issuance', 'Browser Padlock', '99.9% Browser Recognition'],
     popular: false,
   },
@@ -24,7 +25,7 @@ const sslPlans = [
     price: 35000,
     validation: 'Organization Validation',
     issuance: '1-3 Days',
-    warranty: '$250,000',
+    warranty: 'IQD 350,000,000',
     features: ['Single Domain', 'Organization Validation', 'Business Verification', 'Dynamic Site Seal', 'Priority Support'],
     popular: true,
   },
@@ -33,7 +34,7 @@ const sslPlans = [
     price: 75000,
     validation: 'Domain Validation',
     issuance: 'Minutes',
-    warranty: '$50,000',
+    warranty: 'IQD 75,000,000',
     features: ['Unlimited Subdomains', 'Domain Validation', '*.domain.com Coverage', 'Easy Management', 'Quick Issuance'],
     popular: false,
   },
@@ -42,7 +43,7 @@ const sslPlans = [
     price: 120000,
     validation: 'Extended Validation',
     issuance: '3-7 Days',
-    warranty: '$1,000,000',
+    warranty: 'IQD 1,500,000,000',
     features: ['Single Domain', 'Extended Validation', 'Green Address Bar', 'Highest Trust Level', 'Premium Support'],
     popular: false,
   },
@@ -140,9 +141,11 @@ export default function SSLPage() {
                           ))}
                         </ul>
                       </div>
-                      <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
-                        {t('common.orderNow')}
-                      </Button>
+                      <Link href={`/order/ssl/${plan.name.toLowerCase().replace(' ', '-')}`}>
+                        <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
+                          {t('common.orderNow')}
+                        </Button>
+                      </Link>
                     </CardContent>
                   </Card>
                 </motion.div>

@@ -39,7 +39,7 @@ const services = [
   { href: '/dedicated', label: 'nav.dedicated' },
   { href: '/shared', label: 'nav.shared' },
   { href: '/domains', label: 'nav.domains' },
-  { href: '/game-servers', label: 'nav.gameServers' },
+  { href: '/game', label: 'nav.gameServers' },
   { href: '/ssl', label: 'nav.ssl' },
 ];
 

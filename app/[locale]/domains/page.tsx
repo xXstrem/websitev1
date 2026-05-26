@@ -10,13 +10,19 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Globe, Check, X, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 const extensions = [
-  { ext: '.com', price: 9.99, popular: true },
-  { ext: '.net', price: 11.99, popular: false },
-  { ext: '.org', price: 12.99, popular: false },
-  { ext: '.cloud', price: 14.99, popular: true },
-  { ext: '.io', price: 39.99, popular: true },
+  { ext: '.com', price: 15000, popular: true },
+  { ext: '.net', price: 18000, popular: false },
+  { ext: '.org', price: 20000, popular: false },
+  { ext: '.cloud', price: 22000, popular: true },
+  { ext: '.io', price: 45000, popular: true },
+  { ext: '.xyz', price: 10000, popular: false },
+  { ext: '.co', price: 25000, popular: false },
+  { ext: '.info', price: 12000, popular: false },
+  { ext: '.biz', price: 15000, popular: false },
+  { ext: '.me', price: 18000, popular: false },
 ];
 
 type SearchResult = typeof extensions[number] & { available: boolean };
@@ -51,6 +57,9 @@ export default function DomainsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
+              <div className="inline-flex items-center justify-center p-3 rounded-full bg-foreground text-background mb-6">
+                <Globe className="h-6 w-6" />
+              </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
                 {t('domains.title')}
               </h1>
@@ -124,10 +133,12 @@ export default function DomainsPage() {
                           {result.available ? (
                             <>
                               <Check className="h-5 w-5 text-green-500" />
-                              <span className="text-muted-foreground line-through">
-                                ${result.price}
+                              <span className="text-muted-foreground">
+                                {result.price.toLocaleString()} IQD/yr
                               </span>
-                              <Button size="sm">Add to Cart</Button>
+                              <Link href={`/order/domains/${result.ext.replace('.', '')}`}>
+                                <Button size="sm">{t('common.orderNow')}</Button>
+                              </Link>
                             </>
                           ) : (
                             <>
@@ -175,8 +186,8 @@ export default function DomainsPage() {
                   )}
                   <div className="text-2xl font-bold mb-2">{ext.ext}</div>
                   <div className="text-lg">
-                    ${ext.price}
-                    <span className="text-sm text-muted-foreground">/yr</span>
+                    {ext.price.toLocaleString()}
+                    <span className="text-sm text-muted-foreground"> IQD/yr</span>
                   </div>
                 </motion.div>
               ))}

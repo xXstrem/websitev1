@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { Check, Cloud, Shield, Mail, Database, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
 
 const sharedPlans = [
   {
@@ -118,9 +119,11 @@ export default function SharedPage() {
                           ))}
                         </ul>
                       </div>
-                      <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
-                        {t('common.orderNow')}
-                      </Button>
+                      <Link href={`/order/shared/${plan.name.toLowerCase()}`}>
+                        <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
+                          {t('common.orderNow')}
+                        </Button>
+                      </Link>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -162,57 +165,6 @@ export default function SharedPage() {
                   </motion.div>
                 );
               })}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16 lg:py-24">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-2xl sm:text-3xl font-bold mb-6">
-                  Perfect for Small Websites
-                </h2>
-                <p className="text-muted-foreground mb-6">
-                  Shared hosting is the most affordable way to get your website online.
-                  Perfect for blogs, portfolios, small businesses, and startups.
-                </p>
-                <ul className="space-y-3">
-                  {['One-click WordPress installation', 'Easy-to-use website builder', 'Automatic updates and security patches', 'Expert support team'].map((item) => (
-                    <li key={item} className="flex items-center gap-2">
-                      <Check className="h-5 w-5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-              <motion.div
-                className="grid grid-cols-2 gap-4"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-              >
-                <div className="p-6 bg-muted/30 rounded-xl text-center">
-                  <div className="text-3xl font-bold">99.9%</div>
-                  <div className="text-sm text-muted-foreground">Uptime</div>
-                </div>
-                <div className="p-6 bg-muted/30 rounded-xl text-center">
-                  <div className="text-3xl font-bold">Free</div>
-                  <div className="text-sm text-muted-foreground">SSL Certificate</div>
-                </div>
-                <div className="p-6 bg-muted/30 rounded-xl text-center">
-                  <div className="text-3xl font-bold">Daily</div>
-                  <div className="text-sm text-muted-foreground">Backups</div>
-                </div>
-                <div className="p-6 bg-muted/30 rounded-xl text-center">
-                  <div className="text-3xl font-bold">24/7</div>
-                  <div className="text-sm text-muted-foreground">Support</div>
-                </div>
-              </motion.div>
             </div>
           </div>
         </section>

@@ -18,7 +18,7 @@ const services = [
   { key: 'dedicated', icon: HardDrive, href: '/dedicated' },
   { key: 'shared', icon: Monitor, href: '/shared' },
   { key: 'domains', icon: Globe, href: '/domains' },
-  { key: 'game', icon: Gamepad2, href: '/game-servers' },
+  { key: 'game', icon: Gamepad2, href: '/game' },
   { key: 'ssl', icon: Lock, href: '/ssl' },
 ];
 
