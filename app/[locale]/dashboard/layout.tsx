@@ -1,10 +1,9 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Server,
@@ -28,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'overview', href: '/dashboard' },
@@ -39,12 +37,37 @@ const navItems = [
   { icon: Settings, label: 'settings', href: '/dashboard/settings' },
 ];
 
+const translations: Record<string, Record<string, any>> = {
+  en: {
+    overview: { title: 'Overview' },
+    services: { title: 'My Services' },
+    orders: { title: 'Orders' },
+    invoices: { title: 'Invoices' },
+    tickets: { title: 'Support' },
+    settings: { title: 'Settings' },
+    myAccount: 'My Account',
+    logout: 'Logout',
+  },
+  ar: {
+    overview: { title: 'نظرة عامة' },
+    services: { title: 'خدماتي' },
+    orders: { title: 'الطلبات' },
+    invoices: { title: 'الفواتير' },
+    tickets: { title: 'الدعم' },
+    settings: { title: 'الإعدادات' },
+    myAccount: 'حسابي',
+    logout: 'تسجيل الخروج',
+  },
+};
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const t = useTranslations('dashboard');
+  const params = useParams();
+  const locale = params.locale as string || 'en';
+  const t = translations[locale as keyof typeof translations] || translations.en;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -52,7 +75,11 @@ export default function DashboardLayout({
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/login');
+    router.push(`/${locale}/auth/login`);
+  };
+
+  const getLocalizedPath = (path: string) => {
+    return `/${locale}${path.startsWith('/') ? path : '/' + path}`;
   };
 
   return (
@@ -64,10 +91,10 @@ export default function DashboardLayout({
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-4 border-b">
-            <Link href="/" className="flex items-center gap-2 text-xl font-bold">
+            <a href={`/${locale}`} className="flex items-center gap-2 text-xl font-bold">
               <span className="bg-foreground text-background px-2 py-1 rounded">Ton</span>
               <span>Cloud</span>
-            </Link>
+            </a>
             <Button
               variant="ghost"
               size="icon"
@@ -81,11 +108,12 @@ export default function DashboardLayout({
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname?.startsWith(item.href));
+              const isActive = pathname === getLocalizedPath(item.href) ||
+                (item.href !== '/dashboard' && pathname?.includes(item.href));
               return (
-                <Link
+                <a
                   key={item.href}
-                  href={item.href}
+                  href={getLocalizedPath(item.href)}
                   className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                     isActive
                       ? 'bg-foreground text-background'
@@ -94,8 +122,8 @@ export default function DashboardLayout({
                   onClick={() => setSidebarOpen(false)}
                 >
                   <Icon className="h-5 w-5" />
-                  <span>{t(`${item.label}.title`)}</span>
-                </Link>
+                  <span>{t[item.label]?.title || item.label}</span>
+                </a>
               );
             })}
           </nav>
@@ -103,7 +131,7 @@ export default function DashboardLayout({
           <div className="p-4 border-t">
             <Button variant="outline" className="w-full justify-start gap-3" onClick={handleLogout}>
               <LogOut className="h-5 w-5" />
-              <span>Logout</span>
+              <span>{t.logout}</span>
             </Button>
           </div>
         </div>
@@ -134,18 +162,18 @@ export default function DashboardLayout({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{t.myAccount}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings" className="cursor-pointer">
+                  <a href={getLocalizedPath('/dashboard/settings')} className="cursor-pointer flex items-center">
                     <Settings className="mr-2 h-4 w-4" />
-                    <span>{t('settings.title')}</span>
-                  </Link>
+                    <span>{t.settings.title}</span>
+                  </a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Logout</span>
+                  <span>{t.logout}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
