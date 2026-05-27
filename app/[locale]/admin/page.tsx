@@ -1,161 +1,179 @@
 'use client';
 
-import { useLanguage } from '@/i18n/context';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Users,
-  ShoppingBag,
-  DollarSign,
-  Ticket,
-  TrendingUp,
-  TrendingDown,
-} from 'lucide-react';
-
-const stats = [
-  { key: 'totalUsers', icon: Users, value: '1,234', change: '+12%', positive: true },
-  { key: 'totalOrders', icon: ShoppingBag, value: '567', change: '+8%', positive: true },
-  { key: 'totalRevenue', icon: DollarSign, value: '$45,678', change: '+23%', positive: true },
-  { key: 'openTickets', icon: Ticket, value: '12', change: '-5%', positive: true },
-];
-
-const recentOrders = [
-  { id: 'ORD-001', customer: 'John Doe', service: 'VPS Basic', amount: '$9.99', status: 'pending' },
-  { id: 'ORD-002', customer: 'Jane Smith', service: 'Dedicated Pro', amount: '$149.99', status: 'paid' },
-  { id: 'ORD-003', customer: 'Bob Wilson', service: 'Shared Starter', amount: '$2.99', status: 'delivered' },
-  { id: 'ORD-004', customer: 'Alice Brown', service: 'VPS Enterprise', amount: '$49.99', status: 'processing' },
-];
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Server, Lock, Mail, Loader2 } from 'lucide-react';
 
 const translations = {
   en: {
-    dashboardTitle: 'Admin Dashboard',
-    dashboardSubtitle: 'Welcome to your admin dashboard',
-    totalUsers: 'Total Users',
-    totalOrders: 'Total Orders',
-    totalRevenue: 'Total Revenue',
-    openTickets: 'Open Tickets',
-    fromLastMonth: 'from last month',
-    recentOrders: 'Recent Orders',
-    orderId: 'Order ID',
-    customer: 'Customer',
-    service: 'Service',
-    amount: 'Amount',
-    status: 'Status',
+    title: 'Admin Login',
+    subtitle: 'Access the admin control panel',
+    email: 'Email Address',
+    password: 'Password',
+    button: 'Sign In',
+    appName: 'Ton Cloud',
+    remember: 'Remember me',
+    error: 'Invalid credentials. Please try again.',
   },
   ar: {
-    dashboardTitle: 'لوحة تحكم المدير',
-    dashboardSubtitle: 'مرحباً بك في لوحة تحكم المدير',
-    totalUsers: 'إجمالي المستخدمين',
-    totalOrders: 'إجمالي الطلبات',
-    totalRevenue: 'إجمالي الإيرادات',
-    openTickets: 'التذاكر المفتوحة',
-    fromLastMonth: 'من الشهر الماضي',
-    recentOrders: 'الطلبات الأخيرة',
-    orderId: 'رقم الطلب',
-    customer: 'العميل',
-    service: 'الخدمة',
-    amount: 'المبلغ',
-    status: 'الحالة',
+    title: 'تسجيل دخول الإدارة',
+    subtitle: 'الوصول إلى لوحة تحكم الإدارة',
+    email: 'البريد الإلكتروني',
+    password: 'كلمة المرور',
+    button: 'تسجيل الدخول',
+    appName: 'تون كلاود',
+    remember: 'تذكرني',
+    error: 'بيانات اعتماد غير صالحة. يرجى المحاولة مرة أخرى.',
   },
 };
 
-export default function AdminDashboard() {
-  const { locale } = useLanguage();
-  const tr = translations[locale] || translations.en;
+export default function AdminLoginPage() {
+  const params = useParams();
+  const locale = params.locale as string || 'en';
+  const t = translations[locale as keyof typeof translations];
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    remember: false,
+  });
+
+  // Hardcoded admin credentials
+  const ADMIN_CREDENTIALS = {
+    email: 'admin@ton-cloud.com',
+    password: 'Ahmed2026$',
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    if (formData.email === ADMIN_CREDENTIALS.email && formData.password === ADMIN_CREDENTIALS.password) {
+      // Success - store admin session
+      const adminUser = {
+        email: formData.email,
+        name: 'Admin',
+        role: 'super_admin',
+      };
+
+      if (formData.remember) {
+        localStorage.setItem('adminUser', JSON.stringify(adminUser));
+      } else {
+        sessionStorage.setItem('adminUser', JSON.stringify(adminUser));
+      }
+
+      router.push(`/${locale}/admin/dashboard`);
+    } else {
+      setError(t.error);
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-muted via-background to-muted/50 px-4 py-12">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="w-full max-w-md"
       >
-        <h1 className="text-2xl sm:text-3xl font-bold">{tr.dashboardTitle}</h1>
-        <p className="text-muted-foreground mt-1">
-          {tr.dashboardSubtitle}
-        </p>
-      </motion.div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          const statLabel = tr[stat.key as keyof typeof tr] || stat.key;
-          return (
-            <motion.div
-              key={stat.key}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Card className="hover-lift">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {statLabel}
-                  </CardTitle>
-                  <div className="p-2 rounded-lg bg-muted">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className={`flex items-center text-xs ${stat.positive ? 'text-green-600' : 'text-destructive'}`}>
-                    {stat.positive ? (
-                      <TrendingUp className="h-3 w-3 mr-1" />
-                    ) : (
-                      <TrendingDown className="h-3 w-3 mr-1" />
-                    )}
-                    {stat.change} {tr.fromLastMonth}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          );
-        })}
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">{tr.recentOrders}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.orderId}</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.customer}</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.service}</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.amount}</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.status}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentOrders.map((order) => (
-                    <tr key={order.id} className="border-b last:border-0 hover:bg-muted/50">
-                      <td className="py-3 px-4 text-sm font-medium">{order.id}</td>
-                      <td className="py-3 px-4 text-sm">{order.customer}</td>
-                      <td className="py-3 px-4 text-sm">{order.service}</td>
-                      <td className="py-3 px-4 text-sm font-medium">{order.amount}</td>
-                      <td className="py-3 px-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          order.status === 'delivered' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                          order.status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-                          order.status === 'paid' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                          'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
-                        }`}>
-                          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <Card className="border-2 shadow-xl">
+          <CardHeader className="text-center pb-2">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="p-3 rounded-xl bg-foreground text-background">
+                <Server className="h-7 w-7" />
+              </div>
             </div>
-          </CardContent>
+            <CardTitle className="text-2xl font-bold">{t.title}</CardTitle>
+            <CardDescription>{t.subtitle}</CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit}>
+            <CardContent className="space-y-4 pt-4">
+              {error && (
+                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive text-destructive text-sm text-center">
+                  {error}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="email">{t.email}</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground rtl:left-auto rtl:right-3" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="admin@ton-cloud.com"
+                    className="pl-10 rtl:pl-3 rtl:pr-10"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    disabled={isLoading}
+                    autoComplete="email"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">{t.password}</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground rtl:left-auto rtl:right-3" />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    className="pl-10 rtl:pl-3 rtl:pr-10"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
+                    disabled={isLoading}
+                    autoComplete="current-password"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  checked={formData.remember}
+                  onChange={(e) => setFormData({ ...formData, remember: e.target.checked })}
+                  className="h-4 w-4 rounded border-gray-300"
+                />
+                <Label htmlFor="remember" className="text-sm font-normal cursor-pointer">
+                  {t.remember}
+                </Label>
+              </div>
+
+              <Button type="submit" className="w-full h-11" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>{locale === 'ar' ? 'جاري التحميل...' : 'Loading...'}</span>
+                  </>
+                ) : (
+                  t.button
+                )}
+              </Button>
+            </CardContent>
+          </form>
+
+          <div className="pb-6 text-center">
+            <p className="text-xs text-muted-foreground">
+              {t.appName} &copy; 2024
+            </p>
+          </div>
         </Card>
       </motion.div>
     </div>
