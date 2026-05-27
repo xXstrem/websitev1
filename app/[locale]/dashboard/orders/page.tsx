@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,8 +28,38 @@ const statusColors: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
 };
 
+const translations = {
+  en: {
+    title: 'My Orders',
+    viewHistory: 'View your order history',
+    newOrder: 'New Order',
+    noOrders: 'No orders yet',
+    noOrdersDesc: "You haven't placed any orders yet.",
+    browseServices: 'Browse Services',
+    orderNumber: 'Order Number',
+    amount: 'Amount',
+    status: 'Status',
+    date: 'Date',
+    actions: 'Actions',
+  },
+  ar: {
+    title: 'طلباتي',
+    viewHistory: 'عرض سجل طلباتك',
+    newOrder: 'طلب جديد',
+    noOrders: 'لا توجد طلبات',
+    noOrdersDesc: 'لم تقم بأي طلبات بعد.',
+    browseServices: 'تصفح الخدمات',
+    orderNumber: 'رقم الطلب',
+    amount: 'المبلغ',
+    status: 'الحالة',
+    date: 'التاريخ',
+    actions: 'الإجراءات',
+  },
+};
+
 export default function OrdersPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -66,12 +96,12 @@ export default function OrdersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{t('dashboard.orders.title')}</h1>
-          <p className="text-muted-foreground">View your order history</p>
+          <p className="text-muted-foreground">{tr.viewHistory}</p>
         </div>
-        <a href="/pricing">
+        <a href={`/${locale}/pricing`}>
           <Button className="gap-2">
             <ShoppingBag className="h-4 w-4" />
-            New Order
+            {tr.newOrder}
           </Button>
         </a>
       </div>
@@ -81,20 +111,20 @@ export default function OrdersPage() {
           <CardContent className="p-8 text-center">
             <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-semibold mb-2">{t('dashboard.orders.empty')}</h3>
-            <p className="text-muted-foreground mb-4">You haven't placed any orders yet.</p>
-            <a href="/pricing">
-              <Button>Browse Services</Button>
+            <p className="text-muted-foreground mb-4">{tr.noOrdersDesc}</p>
+            <a href={`/${locale}/pricing`}>
+              <Button>{tr.browseServices}</Button>
             </a>
           </CardContent>
         </Card>
       ) : (
         <div className="rounded-lg border">
           <div className="grid grid-cols-12 gap-4 p-4 bg-muted/50 font-medium text-sm hidden sm:grid">
-            <div className="col-span-3">{t('dashboard.orders.orderNumber')}</div>
-            <div className="col-span-2">{t('dashboard.orders.amount')}</div>
-            <div className="col-span-2">{t('dashboard.orders.status')}</div>
-            <div className="col-span-3">{t('dashboard.orders.date')}</div>
-            <div className="col-span-2 text-end">Actions</div>
+            <div className="col-span-3">{tr.orderNumber}</div>
+            <div className="col-span-2">{tr.amount}</div>
+            <div className="col-span-2">{tr.status}</div>
+            <div className="col-span-3">{tr.date}</div>
+            <div className="col-span-2 text-end">{tr.actions}</div>
           </div>
           <div className="divide-y">
             {orders.map((order, index) => (

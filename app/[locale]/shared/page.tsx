@@ -3,12 +3,11 @@
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import CTASection from '@/components/home/cta-section';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Check, Cloud, Shield, Mail, Database, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
 
 const sharedPlans = [
   {
@@ -49,8 +48,26 @@ const features = [
   { icon: Zap, title: 'PHP 8 Support', description: 'Latest PHP versions for optimal performance' },
 ];
 
+const translations = {
+  en: {
+    title: 'Shared Hosting',
+    subtitle: 'Affordable and reliable shared hosting solutions for your website',
+    featuresTitle: 'Features Included',
+    orderNow: 'Order Now',
+    mostPopular: 'Most Popular',
+  },
+  ar: {
+    title: 'الاستضافة المشتركة',
+    subtitle: 'حلول استضافة مشتركة ميسورة التكلفة وموثوقة لموقعك',
+    featuresTitle: 'الميزات المضمنة',
+    orderNow: 'اطلب الآن',
+    mostPopular: 'الأكثر شعبية',
+  },
+};
+
 export default function SharedPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -68,10 +85,10 @@ export default function SharedPage() {
                 <Cloud className="h-6 w-6" />
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('shared.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('shared.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
           </div>
@@ -91,7 +108,7 @@ export default function SharedPage() {
                     {plan.popular && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <span className="bg-foreground text-background text-xs font-semibold px-3 py-1 rounded-full">
-                          Most Popular
+                          {tr.mostPopular}
                         </span>
                       </div>
                     )}
@@ -119,11 +136,11 @@ export default function SharedPage() {
                           ))}
                         </ul>
                       </div>
-                      <Link href={`/order/shared/${plan.name.toLowerCase()}`}>
+                      <a href={`/${locale}/order/shared/${plan.name.toLowerCase()}`}>
                         <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
                           {t('common.orderNow')}
                         </Button>
-                      </Link>
+                      </a>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -141,7 +158,7 @@ export default function SharedPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-                {t('shared.features.title')}
+                {tr.featuresTitle}
               </h2>
             </motion.div>
 

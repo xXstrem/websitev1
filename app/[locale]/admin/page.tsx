@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -26,8 +26,42 @@ const recentOrders = [
   { id: 'ORD-004', customer: 'Alice Brown', service: 'VPS Enterprise', amount: '$49.99', status: 'processing' },
 ];
 
+const translations = {
+  en: {
+    dashboardTitle: 'Admin Dashboard',
+    dashboardSubtitle: 'Welcome to your admin dashboard',
+    totalUsers: 'Total Users',
+    totalOrders: 'Total Orders',
+    totalRevenue: 'Total Revenue',
+    openTickets: 'Open Tickets',
+    fromLastMonth: 'from last month',
+    recentOrders: 'Recent Orders',
+    orderId: 'Order ID',
+    customer: 'Customer',
+    service: 'Service',
+    amount: 'Amount',
+    status: 'Status',
+  },
+  ar: {
+    dashboardTitle: 'لوحة تحكم المدير',
+    dashboardSubtitle: 'مرحباً بك في لوحة تحكم المدير',
+    totalUsers: 'إجمالي المستخدمين',
+    totalOrders: 'إجمالي الطلبات',
+    totalRevenue: 'إجمالي الإيرادات',
+    openTickets: 'التذاكر المفتوحة',
+    fromLastMonth: 'من الشهر الماضي',
+    recentOrders: 'الطلبات الأخيرة',
+    orderId: 'رقم الطلب',
+    customer: 'العميل',
+    service: 'الخدمة',
+    amount: 'المبلغ',
+    status: 'الحالة',
+  },
+};
+
 export default function AdminDashboard() {
-  const t = useTranslations('admin');
+  const { locale } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="space-y-8">
@@ -35,15 +69,16 @@ export default function AdminDashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-2xl sm:text-3xl font-bold">{t('dashboard.title')}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">{tr.dashboardTitle}</h1>
         <p className="text-muted-foreground mt-1">
-          Welcome to your admin dashboard
+          {tr.dashboardSubtitle}
         </p>
       </motion.div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
+          const statLabel = tr[stat.key as keyof typeof tr] || stat.key;
           return (
             <motion.div
               key={stat.key}
@@ -54,7 +89,7 @@ export default function AdminDashboard() {
               <Card className="hover-lift">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {t(`dashboard.${stat.key}`)}
+                    {statLabel}
                   </CardTitle>
                   <div className="p-2 rounded-lg bg-muted">
                     <Icon className="h-4 w-4" />
@@ -68,7 +103,7 @@ export default function AdminDashboard() {
                     ) : (
                       <TrendingDown className="h-3 w-3 mr-1" />
                     )}
-                    {stat.change} from last month
+                    {stat.change} {tr.fromLastMonth}
                   </div>
                 </CardContent>
               </Card>
@@ -84,18 +119,18 @@ export default function AdminDashboard() {
       >
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Recent Orders</CardTitle>
+            <CardTitle className="text-lg">{tr.recentOrders}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Order ID</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Customer</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Service</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Amount</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.orderId}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.customer}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.service}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.amount}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{tr.status}</th>
                   </tr>
                 </thead>
                 <tbody>

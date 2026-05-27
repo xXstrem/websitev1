@@ -3,7 +3,7 @@
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import CTASection from '@/components/home/cta-section';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
@@ -50,8 +50,20 @@ const faqs = [
   },
 ];
 
+const translations = {
+  en: {
+    title: 'Frequently Asked Questions',
+    subtitle: 'Find answers to common questions about our services',
+  },
+  ar: {
+    title: 'الأسئلة الشائعة',
+    subtitle: 'ابحث عن إجابات للأسئلة الشائعة حول خدماتنا',
+  },
+};
+
 export default function FAQPage() {
-  const t = useTranslations();
+  const { locale } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -66,10 +78,10 @@ export default function FAQPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('faq.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('faq.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
           </div>

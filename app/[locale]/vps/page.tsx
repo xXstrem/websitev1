@@ -4,7 +4,7 @@ import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import CTASection from '@/components/home/cta-section';
 import PricingCard from '@/components/pricing/pricing-card';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
@@ -56,8 +56,22 @@ const includedFeatures = [
   '24/7 Technical Support',
 ];
 
+const translations = {
+  en: {
+    title: 'VPS Hosting',
+    subtitle: 'High-performance virtual private servers with dedicated resources',
+    featuresTitle: 'All Plans Include',
+  },
+  ar: {
+    title: 'استضافة VPS',
+    subtitle: 'خوادم افتراضية خاصة عالية الأداء بموارد مخصصة',
+    featuresTitle: 'جميع الخطط تتضمن',
+  },
+};
+
 export default function VPSPage() {
-  const t = useTranslations();
+  const { locale } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -72,10 +86,10 @@ export default function VPSPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('vps.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('vps.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
           </div>
@@ -93,7 +107,7 @@ export default function VPSPage() {
                   features={plan.features}
                   popular={plan.popular}
                   index={index}
-                  href={`/order/vps/${plan.name.toLowerCase()}`}
+                  href={`/${locale}/order/vps/${plan.name.toLowerCase()}`}
                   specs={plan.specs}
                 />
               ))}
@@ -110,7 +124,7 @@ export default function VPSPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-                {t('vps.features.title')}
+                {tr.featuresTitle}
               </h2>
             </motion.div>
 

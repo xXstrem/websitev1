@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -21,8 +21,38 @@ interface DashboardStats {
   totalInvoices: number;
 }
 
+const translations = {
+  en: {
+    welcome: 'Welcome back',
+    overview: 'Overview',
+    activeServices: 'Active Services',
+    pendingOrders: 'Pending Orders',
+    openTickets: 'Open Tickets',
+    totalInvoices: 'Total Invoices',
+    quickActions: 'Quick Actions',
+    orderNewService: 'Order New Service',
+    openTicket: 'Open Ticket',
+    viewInvoices: 'View Invoices',
+    myServices: 'My Services',
+  },
+  ar: {
+    welcome: 'مرحباً بعودتك',
+    overview: 'نظرة عامة',
+    activeServices: 'الخدمات النشطة',
+    pendingOrders: 'الطلبات المعلقة',
+    openTickets: 'التذاكر المفتوحة',
+    totalInvoices: 'إجمالي الفواتير',
+    quickActions: 'إجراءات سريعة',
+    orderNewService: 'طلب خدمة جديدة',
+    openTicket: 'فتح تذكرة',
+    viewInvoices: 'عرض الفواتير',
+    myServices: 'خدماتي',
+  },
+};
+
 export default function DashboardPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const [stats, setStats] = useState<DashboardStats>({
@@ -98,7 +128,7 @@ export default function DashboardPage() {
             {t('dashboard.welcome')}, {username}!
           </h1>
           <p className="text-muted-foreground mt-1">
-            {t('dashboard.overview.title')}
+            {tr.overview}
           </p>
         </div>
         <Avatar className="h-12 w-12 hidden sm:flex">
@@ -121,7 +151,7 @@ export default function DashboardPage() {
               <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {t(`dashboard.overview.${stat.key}`)}
+                    {tr[stat.key as keyof typeof tr]}
                   </CardTitle>
                   <div className="p-2 rounded-lg bg-foreground text-background">
                     <Icon className="h-4 w-4" />
@@ -143,25 +173,25 @@ export default function DashboardPage() {
       >
         <Card>
           <CardHeader>
-            <CardTitle>{t('dashboard.overview.title')}</CardTitle>
+            <CardTitle>{tr.quickActions}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <a href="/dashboard/orders" className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
+              <a href={`/${locale}/pricing`} className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
                 <ShoppingBag className="h-6 w-6" />
-                <span className="text-sm font-medium">Order New Service</span>
+                <span className="text-sm font-medium">{tr.orderNewService}</span>
               </a>
-              <a href="/dashboard/tickets" className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
+              <a href={`/${locale}/dashboard/tickets`} className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
                 <Ticket className="h-6 w-6" />
-                <span className="text-sm font-medium">Open Ticket</span>
+                <span className="text-sm font-medium">{tr.openTicket}</span>
               </a>
-              <a href="/dashboard/invoices" className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
+              <a href={`/${locale}/dashboard/invoices`} className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
                 <FileText className="h-6 w-6" />
-                <span className="text-sm font-medium">View Invoices</span>
+                <span className="text-sm font-medium">{tr.viewInvoices}</span>
               </a>
-              <a href="/dashboard/services" className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
+              <a href={`/${locale}/dashboard/services`} className="flex flex-col items-center gap-2 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer">
                 <Server className="h-6 w-6" />
-                <span className="text-sm font-medium">My Services</span>
+                <span className="text-sm font-medium">{tr.myServices}</span>
               </a>
             </div>
           </CardContent>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
@@ -110,11 +110,87 @@ const serviceConfigs: Record<string, ServiceConfig> = {
   },
 };
 
+const translations = {
+  en: {
+    orderTitle: 'Order',
+    selectPlan: 'Select Plan',
+    configuration: 'Configuration',
+    popular: 'Popular',
+    orderSummary: 'Order Summary',
+    service: 'Service',
+    plan: 'Plan',
+    billing: 'Billing',
+    perMonth: 'month',
+    perYear: 'year',
+    total: 'Total',
+    placeOrder: 'Place Order',
+    processing: 'Processing...',
+    paymentNote: 'Payment will be processed manually after order submission',
+    serviceNotFound: 'Service Not Found',
+    serviceNotFoundDesc: 'The requested service does not exist.',
+    viewAllServices: 'View All Services',
+    hostname: 'Hostname',
+    domainName: 'Domain Name',
+    operatingSystem: 'Operating System',
+    serverLocation: 'Server Location',
+    gameType: 'Game Type',
+    numberOfSlots: 'Number of Slots',
+    raidConfiguration: 'RAID Configuration',
+    additionalNotes: 'Additional Notes (Optional)',
+    specialRequirements: 'Any special requirements...',
+    error: 'Error',
+    success: 'Success',
+    orderPlaced: 'Order placed successfully. We will process it shortly.',
+    pleaseSelectPlan: 'Please select a plan and ensure you are logged in.',
+    cpu: 'CPU',
+    ram: 'RAM',
+    storage: 'Storage',
+    bandwidth: 'Bandwidth',
+  },
+  ar: {
+    orderTitle: 'طلب',
+    selectPlan: 'اختر الخطة',
+    configuration: 'التكوين',
+    popular: 'شائع',
+    orderSummary: 'ملخص الطلب',
+    service: 'الخدمة',
+    plan: 'الخطة',
+    billing: 'الفوترة',
+    perMonth: 'شهر',
+    perYear: 'سنة',
+    total: 'المجموع',
+    placeOrder: 'تقديم الطلب',
+    processing: 'جاري المعالجة...',
+    paymentNote: 'سيتم معالجة الدفع يدوياً بعد تقديم الطلب',
+    serviceNotFound: 'الخدمة غير موجودة',
+    serviceNotFoundDesc: 'الخدمة المطلوبة غير موجودة.',
+    viewAllServices: 'عرض جميع الخدمات',
+    hostname: 'اسم المضيف',
+    domainName: 'اسم النطاق',
+    operatingSystem: 'نظام التشغيل',
+    serverLocation: 'موقع السيرفر',
+    gameType: 'نوع اللعبة',
+    numberOfSlots: 'عدد الفتحات',
+    raidConfiguration: 'تكوين RAID',
+    additionalNotes: 'ملاحظات إضافية (اختياري)',
+    specialRequirements: 'أي متطلبات خاصة...',
+    error: 'خطأ',
+    success: 'نجاح',
+    orderPlaced: 'تم تقديم الطلب بنجاح. سنقوم بمعالجته قريباً.',
+    pleaseSelectPlan: 'يرجى اختيار خطة والتأكد من تسجيل الدخول.',
+    cpu: 'المعالج',
+    ram: 'الذاكرة',
+    storage: 'التخزين',
+    bandwidth: 'النطاق الترددي',
+  },
+};
+
 export default function OrderPage() {
   const params = useParams();
   const router = useRouter();
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
   const { toast } = useToast();
+  const tr = translations[locale] || translations.en;
 
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -134,7 +210,7 @@ export default function OrderPage() {
       setAuthLoading(false);
 
       if (!session?.user) {
-        router.push('/auth/login');
+        router.push(`/${locale}/auth/login`);
         return;
       }
 
@@ -144,7 +220,7 @@ export default function OrderPage() {
     };
 
     checkAuth();
-  }, [planName, service, router]);
+  }, [planName, service, router, locale]);
 
   if (authLoading) {
     return (
@@ -161,9 +237,11 @@ export default function OrderPage() {
         <main className="flex-1 pt-20 flex items-center justify-center">
           <Card className="max-w-lg mx-4">
             <CardContent className="p-8 text-center">
-              <h1 className="text-2xl font-bold mb-4">Service Not Found</h1>
-              <p className="text-muted-foreground mb-6">The requested service does not exist.</p>
-              <Button onClick={() => router.push('/pricing')}>View All Services</Button>
+              <h1 className="text-2xl font-bold mb-4">{tr.serviceNotFound}</h1>
+              <p className="text-muted-foreground mb-6">{tr.serviceNotFoundDesc}</p>
+              <a href={`/${locale}/pricing`}>
+                <Button>{tr.viewAllServices}</Button>
+              </a>
             </CardContent>
           </Card>
         </main>
@@ -179,7 +257,7 @@ export default function OrderPage() {
     if (!selectedPlan || !user) {
       toast({
         title: t('common.error'),
-        description: 'Please select a plan and ensure you are logged in.',
+        description: tr.pleaseSelectPlan,
         variant: 'destructive',
       });
       return;
@@ -251,15 +329,15 @@ export default function OrderPage() {
 
       toast({
         title: t('common.success'),
-        description: 'Order placed successfully. We will process it shortly.',
+        description: tr.orderPlaced,
       });
 
-      router.push('/dashboard/orders');
+      router.push(`/${locale}/dashboard/orders`);
     } catch (error: any) {
       console.error('Order error:', error);
       toast({
         title: t('common.error'),
-        description: error.message || t('errors.generic'),
+        description: error.message || t('common.error'),
         variant: 'destructive',
       });
     } finally {
@@ -283,7 +361,7 @@ export default function OrderPage() {
                 <Icon className="h-6 w-6" />
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                Order {service.title}
+                {tr.orderTitle} {service.title}
               </h1>
               <p className="text-lg text-muted-foreground">{service.description}</p>
             </motion.div>
@@ -296,7 +374,7 @@ export default function OrderPage() {
               <div className="lg:col-span-2">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Select Plan</CardTitle>
+                    <CardTitle>{tr.selectPlan}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -312,21 +390,21 @@ export default function OrderPage() {
                         >
                           {p.popular && (
                             <span className="absolute -top-2 right-4 bg-foreground text-background text-xs px-2 py-0.5 rounded">
-                              Popular
+                              {tr.popular}
                             </span>
                           )}
                           <div className="font-semibold text-lg">{p.name}</div>
                           {p.specs && (
                             <div className="text-sm text-muted-foreground mt-1 space-y-0.5">
-                              {p.specs.cpu && <p>CPU: {p.specs.cpu}</p>}
-                              {p.specs.ram && <p>RAM: {p.specs.ram}</p>}
-                              {p.specs.storage && <p>Storage: {p.specs.storage}</p>}
-                              {p.specs.bandwidth && <p>Bandwidth: {p.specs.bandwidth}</p>}
+                              {p.specs.cpu && <p>{tr.cpu}: {p.specs.cpu}</p>}
+                              {p.specs.ram && <p>{tr.ram}: {p.specs.ram}</p>}
+                              {p.specs.storage && <p>{tr.storage}: {p.specs.storage}</p>}
+                              {p.specs.bandwidth && <p>{tr.bandwidth}: {p.specs.bandwidth}</p>}
                             </div>
                           )}
                           <div className="mt-3">
                             <span className="text-2xl font-bold">{p.price.toLocaleString()}</span>
-                            <span className="text-muted-foreground"> IQD/{service.billingCycle === 'monthly' ? 'month' : 'year'}</span>
+                            <span className="text-muted-foreground"> IQD/{service.billingCycle === 'monthly' ? tr.perMonth : tr.perYear}</span>
                           </div>
                           <div className="mt-2 flex flex-wrap gap-1">
                             {p.features.slice(0, 2).map((f) => (
@@ -347,12 +425,12 @@ export default function OrderPage() {
                   >
                     <Card>
                       <CardHeader>
-                        <CardTitle>Configuration</CardTitle>
+                        <CardTitle>{tr.configuration}</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         {service.configFields.includes('hostname') && (
                           <div className="space-y-2">
-                            <Label htmlFor="hostname">Hostname</Label>
+                            <Label htmlFor="hostname">{tr.hostname}</Label>
                             <Input
                               id="hostname"
                               placeholder="server.example.com"
@@ -364,7 +442,7 @@ export default function OrderPage() {
 
                         {service.configFields.includes('domain') && (
                           <div className="space-y-2">
-                            <Label htmlFor="domain">Domain Name</Label>
+                            <Label htmlFor="domain">{tr.domainName}</Label>
                             <Input
                               id="domain"
                               placeholder="example.com"
@@ -376,7 +454,7 @@ export default function OrderPage() {
 
                         {service.configFields.includes('os') && (
                           <div className="space-y-2">
-                            <Label>Operating System</Label>
+                            <Label>{tr.operatingSystem}</Label>
                             <Select value={config.os || ''} onValueChange={(v) => setConfig({ ...config, os: v })}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select OS" />
@@ -396,7 +474,7 @@ export default function OrderPage() {
 
                         {service.configFields.includes('location') && (
                           <div className="space-y-2">
-                            <Label>Server Location</Label>
+                            <Label>{tr.serverLocation}</Label>
                             <Select value={config.location || ''} onValueChange={(v) => setConfig({ ...config, location: v })}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Location" />
@@ -414,7 +492,7 @@ export default function OrderPage() {
 
                         {service.configFields.includes('game') && (
                           <div className="space-y-2">
-                            <Label>Game Type</Label>
+                            <Label>{tr.gameType}</Label>
                             <Select value={config.game || ''} onValueChange={(v) => setConfig({ ...config, game: v })}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Game" />
@@ -433,7 +511,7 @@ export default function OrderPage() {
 
                         {service.configFields.includes('slots') && (
                           <div className="space-y-2">
-                            <Label htmlFor="slots">Number of Slots</Label>
+                            <Label htmlFor="slots">{tr.numberOfSlots}</Label>
                             <Input
                               id="slots"
                               type="number"
@@ -446,7 +524,7 @@ export default function OrderPage() {
 
                         {service.configFields.includes('raid') && (
                           <div className="space-y-2">
-                            <Label>RAID Configuration</Label>
+                            <Label>{tr.raidConfiguration}</Label>
                             <Select value={config.raid || ''} onValueChange={(v) => setConfig({ ...config, raid: v })}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select RAID" />
@@ -462,10 +540,10 @@ export default function OrderPage() {
                         )}
 
                         <div className="space-y-2">
-                          <Label htmlFor="notes">Additional Notes (Optional)</Label>
+                          <Label htmlFor="notes">{tr.additionalNotes}</Label>
                           <Textarea
                             id="notes"
-                            placeholder="Any special requirements..."
+                            placeholder={tr.specialRequirements}
                             value={config.notes || ''}
                             onChange={(e) => setConfig({ ...config, notes: e.target.value })}
                           />
@@ -481,35 +559,35 @@ export default function OrderPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <ShoppingCart className="h-5 w-5" />
-                      Order Summary
+                      {tr.orderSummary}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Service</span>
+                      <span className="text-muted-foreground">{tr.service}</span>
                       <span className="font-medium">{service.title}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Plan</span>
+                      <span className="text-muted-foreground">{tr.plan}</span>
                       <span className="font-medium">{selectedPlan || '-'}</span>
                     </div>
                     {plan?.specs && (
                       <div className="border-t pt-4 space-y-2 text-sm">
-                        {plan.specs.cpu && <div className="flex justify-between"><span className="text-muted-foreground">CPU</span><span>{plan.specs.cpu}</span></div>}
-                        {plan.specs.ram && <div className="flex justify-between"><span className="text-muted-foreground">RAM</span><span>{plan.specs.ram}</span></div>}
-                        {plan.specs.storage && <div className="flex justify-between"><span className="text-muted-foreground">Storage</span><span>{plan.specs.storage}</span></div>}
-                        {plan.specs.bandwidth && <div className="flex justify-between"><span className="text-muted-foreground">Bandwidth</span><span>{plan.specs.bandwidth}</span></div>}
+                        {plan.specs.cpu && <div className="flex justify-between"><span className="text-muted-foreground">{tr.cpu}</span><span>{plan.specs.cpu}</span></div>}
+                        {plan.specs.ram && <div className="flex justify-between"><span className="text-muted-foreground">{tr.ram}</span><span>{plan.specs.ram}</span></div>}
+                        {plan.specs.storage && <div className="flex justify-between"><span className="text-muted-foreground">{tr.storage}</span><span>{plan.specs.storage}</span></div>}
+                        {plan.specs.bandwidth && <div className="flex justify-between"><span className="text-muted-foreground">{tr.bandwidth}</span><span>{plan.specs.bandwidth}</span></div>}
                       </div>
                     )}
                     <div className="border-t pt-4">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Billing</span>
-                        <span>Per {service.billingCycle === 'monthly' ? 'month' : 'year'}</span>
+                        <span className="text-muted-foreground">{tr.billing}</span>
+                        <span>Per {service.billingCycle === 'monthly' ? tr.perMonth : tr.perYear}</span>
                       </div>
                     </div>
                     <div className="border-t pt-4">
                       <div className="flex justify-between text-lg font-semibold">
-                        <span>Total</span>
+                        <span>{tr.total}</span>
                         <span>{plan ? `${plan.price.toLocaleString()} IQD` : '-'}</span>
                       </div>
                     </div>
@@ -532,14 +610,14 @@ export default function OrderPage() {
                       {loading ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Processing...
+                          {tr.processing}
                         </>
                       ) : (
-                        'Place Order'
+                        tr.placeOrder
                       )}
                     </Button>
                     <p className="text-xs text-center text-muted-foreground">
-                      Payment will be processed manually after order submission
+                      {tr.paymentNote}
                     </p>
                   </CardContent>
                 </Card>

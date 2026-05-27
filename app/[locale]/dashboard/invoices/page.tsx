@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,8 +28,36 @@ const statusColors: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
 };
 
+const translations = {
+  en: {
+    title: 'Invoices',
+    viewInvoices: 'View and download your invoices',
+    noInvoices: 'No invoices yet',
+    noInvoicesDesc: "You don't have any invoices yet.",
+    invoice: 'Invoice',
+    amount: 'Amount',
+    status: 'Status',
+    dueDate: 'Due Date',
+    created: 'Created',
+    actions: 'Actions',
+  },
+  ar: {
+    title: 'الفواتير',
+    viewInvoices: 'عرض وتحميل فواتيرك',
+    noInvoices: 'لا توجد فواتير',
+    noInvoicesDesc: 'ليس لديك أي فواتير بعد.',
+    invoice: 'فاتورة',
+    amount: 'المبلغ',
+    status: 'الحالة',
+    dueDate: 'تاريخ الاستحقاق',
+    created: 'تاريخ الإنشاء',
+    actions: 'الإجراءات',
+  },
+};
+
 export default function InvoicesPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -65,7 +93,7 @@ export default function InvoicesPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">{t('dashboard.invoices.title')}</h1>
-        <p className="text-muted-foreground">View and download your invoices</p>
+        <p className="text-muted-foreground">{tr.viewInvoices}</p>
       </div>
 
       {invoices.length === 0 ? (
@@ -73,18 +101,18 @@ export default function InvoicesPage() {
           <CardContent className="p-8 text-center">
             <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-semibold mb-2">{t('dashboard.invoices.empty')}</h3>
-            <p className="text-muted-foreground">You don't have any invoices yet.</p>
+            <p className="text-muted-foreground">{tr.noInvoicesDesc}</p>
           </CardContent>
         </Card>
       ) : (
         <div className="rounded-lg border">
           <div className="grid grid-cols-12 gap-4 p-4 bg-muted/50 font-medium text-sm hidden sm:grid">
-            <div className="col-span-2">Invoice</div>
-            <div className="col-span-2">Amount</div>
-            <div className="col-span-2">Status</div>
-            <div className="col-span-2">Due Date</div>
-            <div className="col-span-2">Created</div>
-            <div className="col-span-2 text-end">Actions</div>
+            <div className="col-span-2">{tr.invoice}</div>
+            <div className="col-span-2">{tr.amount}</div>
+            <div className="col-span-2">{tr.status}</div>
+            <div className="col-span-2">{tr.dueDate}</div>
+            <div className="col-span-2">{tr.created}</div>
+            <div className="col-span-2 text-end">{tr.actions}</div>
           </div>
           <div className="divide-y">
             {invoices.map((invoice, index) => (

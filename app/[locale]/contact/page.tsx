@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,8 +13,44 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Mail, Phone, MessageCircle, Clock, Send, Loader2 } from 'lucide-react';
 
+const translations = {
+  en: {
+    title: 'Contact Us',
+    subtitle: 'Get in touch with our team',
+    sendMessage: 'Send us a message',
+    name: 'Name',
+    email: 'Email',
+    subject: 'Subject',
+    message: 'Message',
+    submit: 'Send Message',
+    contactInfo: 'Contact Information',
+    contactInfoDesc: "We're here to help. Reach out to us through any of the channels below.",
+    emailLabel: 'Email',
+    telegram: 'Telegram',
+    discord: 'Discord',
+    supportHours: 'Support Hours',
+  },
+  ar: {
+    title: 'اتصل بنا',
+    subtitle: 'تواصل مع فريقنا',
+    sendMessage: 'أرسل لنا رسالة',
+    name: 'الاسم',
+    email: 'البريد الإلكتروني',
+    subject: 'الموضوع',
+    message: 'الرسالة',
+    submit: 'إرسال الرسالة',
+    contactInfo: 'معلومات الاتصال',
+    contactInfoDesc: 'نحن هنا للمساعدة. تواصل معنا من خلال أي من القنوات أدناه.',
+    emailLabel: 'البريد الإلكتروني',
+    telegram: 'تيليجرام',
+    discord: 'ديسكورد',
+    supportHours: 'ساعات الدعم',
+  },
+};
+
 export default function ContactPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -33,10 +69,10 @@ export default function ContactPage() {
   };
 
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: 'support@ton-cloud.com' },
-    { icon: MessageCircle, label: 'Telegram', value: '@toncloudsupport' },
-    { icon: MessageCircle, label: 'Discord', value: 'discord.gg/toncloud' },
-    { icon: Clock, label: 'Support Hours', value: '24/7' },
+    { icon: Mail, label: tr.emailLabel, value: 'support@ton-cloud.com' },
+    { icon: MessageCircle, label: tr.telegram, value: '@toncloudsupport' },
+    { icon: MessageCircle, label: tr.discord, value: 'discord.gg/toncloud' },
+    { icon: Clock, label: tr.supportHours, value: '24/7' },
   ];
 
   return (
@@ -52,10 +88,10 @@ export default function ContactPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('contact.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('contact.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
           </div>
@@ -72,13 +108,13 @@ export default function ContactPage() {
               >
                 <Card>
                   <CardHeader>
-                    <CardTitle>Send us a message</CardTitle>
+                    <CardTitle>{tr.sendMessage}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="name">{t('contact.form.name')}</Label>
+                          <Label htmlFor="name">{tr.name}</Label>
                           <Input
                             id="name"
                             placeholder="John Doe"
@@ -90,7 +126,7 @@ export default function ContactPage() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="email">{t('contact.form.email')}</Label>
+                          <Label htmlFor="email">{tr.email}</Label>
                           <Input
                             id="email"
                             type="email"
@@ -105,7 +141,7 @@ export default function ContactPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="subject">{t('contact.form.subject')}</Label>
+                        <Label htmlFor="subject">{tr.subject}</Label>
                         <Input
                           id="subject"
                           placeholder="How can we help you?"
@@ -118,7 +154,7 @@ export default function ContactPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="message">{t('contact.form.message')}</Label>
+                        <Label htmlFor="message">{tr.message}</Label>
                         <Textarea
                           id="message"
                           placeholder="Your message..."
@@ -137,7 +173,7 @@ export default function ContactPage() {
                         ) : (
                           <Send className="mr-2 h-4 w-4" />
                         )}
-                        {t('contact.form.submit')}
+                        {tr.submit}
                       </Button>
                     </form>
                   </CardContent>
@@ -152,10 +188,10 @@ export default function ContactPage() {
               >
                 <div>
                   <h2 className="text-xl font-semibold mb-4">
-                    {t('contact.info.title')}
+                    {tr.contactInfo}
                   </h2>
                   <p className="text-muted-foreground mb-6">
-                    We're here to help. Reach out to us through any of the channels below.
+                    {tr.contactInfoDesc}
                   </p>
                 </div>
 

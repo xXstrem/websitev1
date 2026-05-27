@@ -3,7 +3,7 @@
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import CTASection from '@/components/home/cta-section';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Check, Server, Cloud, Globe, Gamepad2, Lock, Monitor } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -83,8 +83,24 @@ const services: Record<string, Service> = {
   },
 };
 
+const translations = {
+  en: {
+    title: 'Pricing',
+    subtitle: 'Simple, transparent pricing for all your hosting needs',
+    mostPopular: 'Most Popular',
+    orderNow: 'Order Now',
+  },
+  ar: {
+    title: 'الأسعار',
+    subtitle: 'أسعار بسيطة وشفافة لجميع احتياجات الاستضافة الخاصة بك',
+    mostPopular: 'الأكثر شعبية',
+    orderNow: 'اطلب الآن',
+  },
+};
+
 export default function PricingPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -99,10 +115,10 @@ export default function PricingPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('pricing.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('pricing.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
           </div>
@@ -137,7 +153,7 @@ export default function PricingPage() {
                           {plan.popular && (
                             <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                               <span className="bg-foreground text-background text-xs font-semibold px-3 py-1 rounded-full">
-                                Most Popular
+                                {tr.mostPopular}
                               </span>
                             </div>
                           )}
@@ -158,9 +174,11 @@ export default function PricingPage() {
                                 </li>
                               ))}
                             </ul>
-                            <Button className="w-full" variant={plan.popular ? 'default' : 'outline'}>
-                              {t('common.orderNow')}
-                            </Button>
+                            <a href={`/${locale}/order/${key}/${plan.name.toLowerCase().replace(' ', '-')}`}>
+                              <Button className="w-full" variant={plan.popular ? 'default' : 'outline'}>
+                                {t('common.orderNow')}
+                              </Button>
+                            </a>
                           </CardContent>
                         </Card>
                       </motion.div>

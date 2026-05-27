@@ -3,14 +3,13 @@
 import { useState } from 'react';
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Globe, Check, X, Loader2 } from 'lucide-react';
-import Link from 'next/link';
 
 const extensions = [
   { ext: '.com', price: 15000, popular: true },
@@ -27,8 +26,32 @@ const extensions = [
 
 type SearchResult = typeof extensions[number] & { available: boolean };
 
+const translations = {
+  en: {
+    title: 'Domain Registration',
+    subtitle: 'Find your perfect domain name at competitive prices',
+    searchPlaceholder: 'Enter your domain name...',
+    searchButton: 'Search',
+    domainTaken: 'Taken',
+    extensionsTitle: 'Popular Extensions',
+    popular: 'Popular',
+    orderNow: 'Order Now',
+  },
+  ar: {
+    title: 'تسجيل النطاقات',
+    subtitle: 'ابحث عن اسم نطاقك المثالي بأسعار تنافسية',
+    searchPlaceholder: 'أدخل اسم النطاق...',
+    searchButton: 'بحث',
+    domainTaken: 'محجوز',
+    extensionsTitle: 'الامتدادات الشائعة',
+    popular: 'شائع',
+    orderNow: 'اطلب الآن',
+  },
+};
+
 export default function DomainsPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<SearchResult[] | null>(null);
@@ -61,10 +84,10 @@ export default function DomainsPage() {
                 <Globe className="h-6 w-6" />
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('domains.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('domains.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
 
@@ -80,7 +103,7 @@ export default function DomainsPage() {
                       <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground rtl:right-3 rtl:left-auto" />
                       <Input
                         type="text"
-                        placeholder={t('domains.search.placeholder')}
+                        placeholder={tr.searchPlaceholder}
                         className="pl-10 h-12 text-lg rtl:pl-3 rtl:pr-10"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -98,7 +121,7 @@ export default function DomainsPage() {
                       ) : (
                         <>
                           <Search className="h-5 w-5 mr-2" />
-                          {t('domains.search.button')}
+                          {tr.searchButton}
                         </>
                       )}
                     </Button>
@@ -127,7 +150,7 @@ export default function DomainsPage() {
                             {searchQuery}
                             {result.ext}
                           </span>
-                          {result.popular && <Badge>Popular</Badge>}
+                          {result.popular && <Badge>{tr.popular}</Badge>}
                         </div>
                         <div className="flex items-center gap-4">
                           {result.available ? (
@@ -136,14 +159,14 @@ export default function DomainsPage() {
                               <span className="text-muted-foreground">
                                 {result.price.toLocaleString()} IQD/yr
                               </span>
-                              <Link href={`/order/domains/${result.ext.replace('.', '')}`}>
+                              <a href={`/${locale}/order/domains/${result.ext.replace('.', '')}`}>
                                 <Button size="sm">{t('common.orderNow')}</Button>
-                              </Link>
+                              </a>
                             </>
                           ) : (
                             <>
                               <X className="h-5 w-5 text-destructive" />
-                              <span className="text-muted-foreground">{t('domains.search.taken')}</span>
+                              <span className="text-muted-foreground">{tr.domainTaken}</span>
                             </>
                           )}
                         </div>
@@ -165,7 +188,7 @@ export default function DomainsPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-                {t('domains.extensions.title')}
+                {tr.extensionsTitle}
               </h2>
             </motion.div>
 
@@ -181,7 +204,7 @@ export default function DomainsPage() {
                 >
                   {ext.popular && (
                     <Badge className="absolute -top-2 left-1/2 -translate-x-1/2">
-                      Popular
+                      {tr.popular}
                     </Badge>
                   )}
                   <div className="text-2xl font-bold mb-2">{ext.ext}</div>

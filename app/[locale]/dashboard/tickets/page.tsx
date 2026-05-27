@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,6 @@ import { Badge } from '@/components/ui/badge';
 import { Ticket, Plus, MessageCircle, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { format } from 'date-fns';
-import Link from 'next/link';
 
 interface Ticket {
   id: string;
@@ -33,8 +32,56 @@ const priorityColors: Record<string, string> = {
   low: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
 };
 
+const translations = {
+  en: {
+    title: 'Support Tickets',
+    manageTickets: 'Manage your support tickets',
+    newTicket: 'New Ticket',
+    subject: 'Subject',
+    subjectPlaceholder: 'Brief description of your issue',
+    department: 'Department',
+    priority: 'Priority',
+    message: 'Message',
+    messagePlaceholder: 'Describe your issue in detail...',
+    createTicket: 'Create Ticket',
+    cancel: 'Cancel',
+    noTickets: 'No tickets yet',
+    noTicketsDesc: "You haven't created any support tickets yet.",
+    general: 'General',
+    technical: 'Technical',
+    billing: 'Billing',
+    abuse: 'Abuse',
+    low: 'Low',
+    medium: 'Medium',
+    high: 'High',
+  },
+  ar: {
+    title: 'تذاكر الدعم',
+    manageTickets: 'إدارة تذاكر الدعم الخاصة بك',
+    newTicket: 'تذكرة جديدة',
+    subject: 'الموضوع',
+    subjectPlaceholder: 'وصف موجز لمشكلتك',
+    department: 'القسم',
+    priority: 'الأولوية',
+    message: 'الرسالة',
+    messagePlaceholder: 'صف مشكلتك بالتفصيل...',
+    createTicket: 'إنشاء تذكرة',
+    cancel: 'إلغاء',
+    noTickets: 'لا توجد تذاكر',
+    noTicketsDesc: 'لم تنشئ أي تذاكر دعم حتى الآن.',
+    general: 'عام',
+    technical: 'فني',
+    billing: 'الفواتير',
+    abuse: 'إساءة',
+    low: 'منخفض',
+    medium: 'متوسط',
+    high: 'عالي',
+  },
+};
+
 export default function TicketsPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewForm, setShowNewForm] = useState(false);
@@ -121,11 +168,11 @@ export default function TicketsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{t('dashboard.tickets.title')}</h1>
-          <p className="text-muted-foreground">Manage your support tickets</p>
+          <p className="text-muted-foreground">{tr.manageTickets}</p>
         </div>
         <Button className="gap-2" onClick={() => setShowNewForm(true)}>
           <Plus className="h-4 w-4" />
-          New Ticket
+          {tr.newTicket}
         </Button>
       </div>
 
@@ -133,47 +180,47 @@ export default function TicketsPage() {
         <Card>
           <CardContent className="p-6 space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Subject</label>
+              <label className="text-sm font-medium">{tr.subject}</label>
               <input
                 type="text"
                 className="w-full px-3 py-2 border rounded-md"
-                placeholder="Brief description of your issue"
+                placeholder={tr.subjectPlaceholder}
                 value={newTicket.subject}
                 onChange={(e) => setNewTicket({ ...newTicket, subject: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Department</label>
+                <label className="text-sm font-medium">{tr.department}</label>
                 <select
                   className="w-full px-3 py-2 border rounded-md"
                   value={newTicket.department}
                   onChange={(e) => setNewTicket({ ...newTicket, department: e.target.value })}
                 >
-                  <option value="general">General</option>
-                  <option value="technical">Technical</option>
-                  <option value="billing">Billing</option>
-                  <option value="abuse">Abuse</option>
+                  <option value="general">{tr.general}</option>
+                  <option value="technical">{tr.technical}</option>
+                  <option value="billing">{tr.billing}</option>
+                  <option value="abuse">{tr.abuse}</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Priority</label>
+                <label className="text-sm font-medium">{tr.priority}</label>
                 <select
                   className="w-full px-3 py-2 border rounded-md"
                   value={newTicket.priority}
                   onChange={(e) => setNewTicket({ ...newTicket, priority: e.target.value })}
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
+                  <option value="low">{tr.low}</option>
+                  <option value="medium">{tr.medium}</option>
+                  <option value="high">{tr.high}</option>
                 </select>
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Message</label>
+              <label className="text-sm font-medium">{tr.message}</label>
               <textarea
                 className="w-full px-3 py-2 border rounded-md min-h-[120px]"
-                placeholder="Describe your issue in detail..."
+                placeholder={tr.messagePlaceholder}
                 value={newTicket.message}
                 onChange={(e) => setNewTicket({ ...newTicket, message: e.target.value })}
               />
@@ -181,9 +228,9 @@ export default function TicketsPage() {
             <div className="flex gap-2">
               <Button onClick={handleCreateTicket} disabled={submitting}>
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                Create Ticket
+                {tr.createTicket}
               </Button>
-              <Button variant="outline" onClick={() => setShowNewForm(false)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setShowNewForm(false)}>{tr.cancel}</Button>
             </div>
           </CardContent>
         </Card>
@@ -194,8 +241,8 @@ export default function TicketsPage() {
           <CardContent className="p-8 text-center">
             <Ticket className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-semibold mb-2">{t('dashboard.tickets.empty')}</h3>
-            <p className="text-muted-foreground mb-4">You haven't created any support tickets yet.</p>
-            <Button onClick={() => setShowNewForm(true)}>Create Ticket</Button>
+            <p className="text-muted-foreground mb-4">{tr.noTicketsDesc}</p>
+            <Button onClick={() => setShowNewForm(true)}>{tr.newTicket}</Button>
           </CardContent>
         </Card>
       ) : (

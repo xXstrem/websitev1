@@ -3,12 +3,11 @@
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import CTASection from '@/components/home/cta-section';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Check, Monitor, Shield, Zap, HardDrive, Cpu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
 
 const dedicatedPlans = [
   {
@@ -48,8 +47,26 @@ const features = [
   { icon: Cpu, title: 'IPMI Access', description: 'Full remote management capability' },
 ];
 
+const translations = {
+  en: {
+    title: 'Dedicated Servers',
+    subtitle: 'Bare metal performance for your most demanding workloads',
+    featuresTitle: 'Why Choose Our Dedicated Servers',
+    mostPopular: 'Most Popular',
+    orderNow: 'Order Now',
+  },
+  ar: {
+    title: 'الخوادم المخصصة',
+    subtitle: 'أداء الخوادم المادية لأحمال العمل الأكثر تطلباً',
+    featuresTitle: 'لماذا تختار خوادمنا المخصصة',
+    mostPopular: 'الأكثر شعبية',
+    orderNow: 'اطلب الآن',
+  },
+};
+
 export default function DedicatedPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -67,10 +84,10 @@ export default function DedicatedPage() {
                 <Monitor className="h-6 w-6" />
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('dedicated.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('dedicated.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
           </div>
@@ -90,7 +107,7 @@ export default function DedicatedPage() {
                     {plan.popular && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <span className="bg-foreground text-background text-xs font-semibold px-3 py-1 rounded-full">
-                          Most Popular
+                          {tr.mostPopular}
                         </span>
                       </div>
                     )}
@@ -117,11 +134,11 @@ export default function DedicatedPage() {
                           ))}
                         </ul>
                       </div>
-                      <Link href={`/order/dedicated/${plan.name.toLowerCase()}`}>
+                      <a href={`/${locale}/order/dedicated/${plan.name.toLowerCase()}`}>
                         <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
                           {t('common.orderNow')}
                         </Button>
-                      </Link>
+                      </a>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -139,7 +156,7 @@ export default function DedicatedPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-                {t('dedicated.features.title')}
+                {tr.featuresTitle}
               </h2>
             </motion.div>
 

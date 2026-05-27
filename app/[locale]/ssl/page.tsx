@@ -3,12 +3,11 @@
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
 import CTASection from '@/components/home/cta-section';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Check, Shield, Lock, Award, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
 
 const sslPlans = [
   {
@@ -72,8 +71,28 @@ const features = [
   },
 ];
 
+const translations = {
+  en: {
+    title: 'SSL Certificates',
+    subtitle: 'Secure your website with trusted SSL certificates',
+    featuresTitle: 'Why You Need SSL',
+    featuresSubtitle: 'SSL certificates protect your website and build trust with your visitors',
+    orderNow: 'Order Now',
+    mostPopular: 'Most Popular',
+  },
+  ar: {
+    title: 'شهادات SSL',
+    subtitle: 'أمّن موقعك بشهادات SSL موثوقة',
+    featuresTitle: 'لماذا تحتاج SSL',
+    featuresSubtitle: 'شهادات SSL تحمي موقعك وتبني الثقة مع زوارك',
+    orderNow: 'اطلب الآن',
+    mostPopular: 'الأكثر شعبية',
+  },
+};
+
 export default function SSLPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -91,10 +110,10 @@ export default function SSLPage() {
                 <Lock className="h-6 w-6" />
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('ssl.title')}
+                {tr.title}
               </h1>
               <p className="text-lg text-muted-foreground">
-                {t('ssl.subtitle')}
+                {tr.subtitle}
               </p>
             </motion.div>
           </div>
@@ -114,7 +133,7 @@ export default function SSLPage() {
                     {plan.popular && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <span className="bg-foreground text-background text-xs font-semibold px-3 py-1 rounded-full">
-                          Most Popular
+                          {tr.mostPopular}
                         </span>
                       </div>
                     )}
@@ -141,11 +160,11 @@ export default function SSLPage() {
                           ))}
                         </ul>
                       </div>
-                      <Link href={`/order/ssl/${plan.name.toLowerCase().replace(' ', '-')}`}>
+                      <a href={`/${locale}/order/ssl/${plan.name.toLowerCase().replace(' ', '-')}`}>
                         <Button className="w-full mt-4" variant={plan.popular ? 'default' : 'outline'}>
                           {t('common.orderNow')}
                         </Button>
-                      </Link>
+                      </a>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -163,10 +182,10 @@ export default function SSLPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-                Why You Need SSL
+                {tr.featuresTitle}
               </h2>
               <p className="text-muted-foreground">
-                SSL certificates protect your website and build trust with your visitors
+                {tr.featuresSubtitle}
               </p>
             </motion.div>
 

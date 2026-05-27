@@ -2,11 +2,23 @@
 
 import Navbar from '@/components/layout/navbar';
 import Footer from '@/components/layout/footer';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 
+const translations = {
+  en: {
+    title: 'Refund Policy',
+    lastUpdated: 'Last updated: January 2024',
+  },
+  ar: {
+    title: 'سياسة الاسترداد',
+    lastUpdated: 'آخر تحديث: يناير 2024',
+  },
+};
+
 export default function RefundPage() {
-  const t = useTranslations();
+  const { locale } = useLanguage();
+  const tr = translations[locale] || translations.en;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -21,9 +33,9 @@ export default function RefundPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-                {t('legal.refund')}
+                {tr.title}
               </h1>
-              <p className="text-muted-foreground">Last updated: January 2024</p>
+              <p className="text-muted-foreground">{tr.lastUpdated}</p>
             </motion.div>
           </div>
         </section>

@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,8 +11,32 @@ import { KeyRound, ArrowLeft, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/lib/supabase/client';
 
+const translations = {
+  en: {
+    title: 'Forgot Password',
+    subtitle: 'Enter your email to receive a reset link',
+    email: 'Email',
+    button: 'Send Reset Link',
+    back: 'Back to Login',
+    success: 'Check your email',
+    checkEmail: 'We have sent a password reset link to your email address.',
+    loading: 'Loading...',
+  },
+  ar: {
+    title: 'نسيت كلمة المرور',
+    subtitle: 'أدخل بريدك الإلكتروني لتلقي رابط إعادة التعيين',
+    email: 'البريد الإلكتروني',
+    button: 'إرسال رابط إعادة التعيين',
+    back: 'العودة لتسجيل الدخول',
+    success: 'تحقق من بريدك الإلكتروني',
+    checkEmail: 'لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.',
+    loading: 'جاري التحميل...',
+  },
+};
+
 export default function ForgotPasswordPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -26,7 +49,7 @@ export default function ForgotPasswordPage() {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${window.location.origin}/${locale}/auth/reset-password`,
       });
 
       if (error) {
@@ -38,14 +61,14 @@ export default function ForgotPasswordPage() {
       } else {
         setSubmitted(true);
         toast({
-          title: t('auth.forgot.success'),
-          description: t('auth.forgot.checkEmail'),
+          title: tr.success,
+          description: tr.checkEmail,
         });
       }
     } catch {
       toast({
         title: t('common.error'),
-        description: t('errors.generic'),
+        description: t('common.error'),
         variant: 'destructive',
       });
     } finally {
@@ -62,10 +85,10 @@ export default function ForgotPasswordPage() {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold">
+          <a href={`/${locale}`} className="inline-flex items-center gap-2 text-2xl font-bold">
             <span className="bg-foreground text-background px-2 py-1 rounded">Ton</span>
             <span>Cloud</span>
-          </Link>
+          </a>
         </div>
 
         <Card>
@@ -73,8 +96,8 @@ export default function ForgotPasswordPage() {
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-foreground text-background">
               <KeyRound className="h-6 w-6" />
             </div>
-            <CardTitle className="text-2xl">{t('auth.forgot.title')}</CardTitle>
-            <CardDescription>{t('auth.forgot.subtitle')}</CardDescription>
+            <CardTitle className="text-2xl">{tr.title}</CardTitle>
+            <CardDescription>{tr.subtitle}</CardDescription>
           </CardHeader>
           <CardContent>
             {submitted ? (
@@ -86,19 +109,19 @@ export default function ForgotPasswordPage() {
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
                   <CheckCircle className="h-8 w-8 text-green-600" />
                 </div>
-                <p className="text-muted-foreground">{t('auth.forgot.success')}</p>
-                <p className="text-sm text-muted-foreground">{t('auth.forgot.checkEmail')}</p>
-                <Link href="/login">
+                <p className="text-muted-foreground">{tr.success}</p>
+                <p className="text-sm text-muted-foreground">{tr.checkEmail}</p>
+                <a href={`/${locale}/auth/login`}>
                   <Button variant="outline" className="w-full mt-4">
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    {t('auth.forgot.back')}
+                    {tr.back}
                   </Button>
-                </Link>
+                </a>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t('auth.forgot.email')}</Label>
+                  <Label htmlFor="email">{tr.email}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -110,16 +133,16 @@ export default function ForgotPasswordPage() {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? t('common.loading') : t('auth.forgot.button')}
+                  {loading ? t('common.loading') : tr.button}
                 </Button>
                 <div className="text-center">
-                  <Link
-                    href="/login"
+                  <a
+                    href={`/${locale}/auth/login`}
                     className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
                   >
                     <ArrowLeft className="h-4 w-4" />
-                    {t('auth.forgot.back')}
-                  </Link>
+                    {tr.back}
+                  </a>
                 </div>
               </form>
             )}

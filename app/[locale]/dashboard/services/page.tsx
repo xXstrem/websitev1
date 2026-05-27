@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,8 +32,38 @@ const statusColors: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
 };
 
+const translations = {
+  en: {
+    title: 'My Services',
+    manageServices: 'Manage your active services',
+    addService: 'Add Service',
+    noServices: 'No active services',
+    noServicesDesc: "You don't have any active services yet.",
+    browseServices: 'Browse Services',
+    control: 'Control',
+    reboot: 'Reboot',
+    viewDetails: 'View Details',
+    manageBackups: 'Manage Backups',
+    expires: 'Expires',
+  },
+  ar: {
+    title: 'خدماتي',
+    manageServices: 'إدارة خدماتك النشطة',
+    addService: 'إضافة خدمة',
+    noServices: 'لا توجد خدمات نشطة',
+    noServicesDesc: 'ليس لديك أي خدمات نشطة بعد.',
+    browseServices: 'تصفح الخدمات',
+    control: 'تحكم',
+    reboot: 'إعادة تشغيل',
+    viewDetails: 'عرض التفاصيل',
+    manageBackups: 'إدارة النسخ الاحتياطية',
+    expires: 'تنتهي',
+  },
+};
+
 export default function ServicesPage() {
-  const t = useTranslations();
+  const { locale, t } = useLanguage();
+  const tr = translations[locale] || translations.en;
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,12 +100,12 @@ export default function ServicesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{t('dashboard.services.title')}</h1>
-          <p className="text-muted-foreground">Manage your active services</p>
+          <p className="text-muted-foreground">{tr.manageServices}</p>
         </div>
-        <a href="/pricing">
+        <a href={`/${locale}/pricing`}>
           <Button className="gap-2">
             <Server className="h-4 w-4" />
-            Add Service
+            {tr.addService}
           </Button>
         </a>
       </div>
@@ -85,9 +115,9 @@ export default function ServicesPage() {
           <CardContent className="p-8 text-center">
             <Server className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="text-lg font-semibold mb-2">{t('dashboard.services.empty')}</h3>
-            <p className="text-muted-foreground mb-4">You don't have any active services yet.</p>
-            <a href="/pricing">
-              <Button>Browse Services</Button>
+            <p className="text-muted-foreground mb-4">{tr.noServicesDesc}</p>
+            <a href={`/${locale}/pricing`}>
+              <Button>{tr.browseServices}</Button>
             </a>
           </CardContent>
         </Card>
@@ -122,14 +152,14 @@ export default function ServicesPage() {
 
                     <div className="flex flex-col sm:items-end gap-1 text-sm">
                       <div className="text-muted-foreground">
-                        Expires: {service.expires_at ? format(new Date(service.expires_at), 'MMM d, yyyy') : '-'}
+                        {tr.expires}: {service.expires_at ? format(new Date(service.expires_at), 'MMM d, yyyy') : '-'}
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <Button size="sm" variant="outline" className="gap-1">
                         <Power className="h-3 w-3" />
-                        Control
+                        {tr.control}
                       </Button>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -140,10 +170,10 @@ export default function ServicesPage() {
                         <DropdownMenuContent>
                           <DropdownMenuItem>
                             <RefreshCw className="mr-2 h-4 w-4" />
-                            Reboot
+                            {tr.reboot}
                           </DropdownMenuItem>
-                          <DropdownMenuItem>View Details</DropdownMenuItem>
-                          <DropdownMenuItem>Manage Backups</DropdownMenuItem>
+                          <DropdownMenuItem>{tr.viewDetails}</DropdownMenuItem>
+                          <DropdownMenuItem>{tr.manageBackups}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
