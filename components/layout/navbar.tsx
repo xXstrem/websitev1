@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link, useRouter, usePathname } from '@/i18n/routing';
 import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -20,7 +19,6 @@ import {
 import {
   Server,
   Menu,
-  X,
   ChevronDown,
   Globe,
   User,
@@ -34,12 +32,12 @@ import { locales, localeNames, type Locale } from '@/i18n/config';
 import { supabase } from '@/lib/supabase/client';
 
 const services = [
-  { href: '/vps', label: 'nav.vps' },
-  { href: '/dedicated', label: 'nav.dedicated' },
-  { href: '/shared', label: 'nav.shared' },
-  { href: '/domains', label: 'nav.domains' },
-  { href: '/game', label: 'nav.gameServers' },
-  { href: '/ssl', label: 'nav.ssl' },
+  { href: 'vps', label: 'nav.vps' },
+  { href: 'dedicated', label: 'nav.dedicated' },
+  { href: 'shared', label: 'nav.shared' },
+  { href: 'domains', label: 'nav.domains' },
+  { href: 'game', label: 'nav.gameServers' },
+  { href: 'ssl', label: 'nav.ssl' },
 ];
 
 export default function Navbar() {
@@ -49,8 +47,11 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const router = useRouter();
-  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,8 +78,35 @@ export default function Navbar() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(null);
-    router.push('/');
+    window.location.href = `/${locale}`;
   };
+
+  const switchLanguage = (newLocale: string) => {
+    const currentPath = window.location.pathname;
+    // Remove the current locale prefix and add the new one
+    const pathWithoutLocale = currentPath.replace(/^\/(en|ar)/, '') || '/';
+    window.location.href = `/${newLocale}${pathWithoutLocale}`;
+  };
+
+  const getLocalizedPath = (path: string) => {
+    return `/${locale}${path.startsWith('/') ? path : '/' + path}`;
+  };
+
+  if (!mounted) {
+    return (
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background">
+        <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <div className="flex items-center gap-2">
+              <Server className="h-8 w-8" />
+              <span className="text-xl font-bold tracking-tight">Ton Cloud</span>
+            </div>
+            <div className="w-20 h-8" />
+          </div>
+        </nav>
+      </header>
+    );
+  }
 
   return (
     <header
@@ -90,21 +118,21 @@ export default function Navbar() {
     >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="flex items-center gap-2 group">
+          <a href={`/${locale}`} className="flex items-center gap-2 group">
             <div className="relative">
               <Server className="h-8 w-8 transition-transform group-hover:scale-110" />
             </div>
             <span className="text-xl font-bold tracking-tight">
               {t('common.appName')}
             </span>
-          </Link>
+          </a>
 
           <div className="hidden lg:flex items-center gap-1">
-            <Link href="/">
+            <a href={`/${locale}`}>
               <Button variant="ghost" className="text-sm font-medium">
                 {t('nav.home')}
               </Button>
-            </Link>
+            </a>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -116,31 +144,31 @@ export default function Navbar() {
               <DropdownMenuContent align="start" className="w-48">
                 {services.map((service) => (
                   <DropdownMenuItem key={service.href} asChild>
-                    <Link href={service.href} className="w-full cursor-pointer">
+                    <a href={getLocalizedPath(service.href)} className="w-full cursor-pointer">
                       {t(service.label)}
-                    </Link>
+                    </a>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/pricing">
+            <a href={`/${locale}/pricing`}>
               <Button variant="ghost" className="text-sm font-medium">
                 {t('nav.pricing')}
               </Button>
-            </Link>
+            </a>
 
-            <Link href="/about">
+            <a href={`/${locale}/about`}>
               <Button variant="ghost" className="text-sm font-medium">
                 {t('nav.about')}
               </Button>
-            </Link>
+            </a>
 
-            <Link href="/contact">
+            <a href={`/${locale}/contact`}>
               <Button variant="ghost" className="text-sm font-medium">
                 {t('nav.contact')}
               </Button>
-            </Link>
+            </a>
           </div>
 
           <div className="flex items-center gap-2">
@@ -164,7 +192,7 @@ export default function Navbar() {
                 {locales.map((loc) => (
                   <DropdownMenuItem
                     key={loc}
-                    onClick={() => router.push(pathname, { locale: loc })}
+                    onClick={() => switchLanguage(loc)}
                     className={locale === loc ? 'bg-accent' : ''}
                   >
                     {localeNames[loc]}
@@ -183,10 +211,10 @@ export default function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="w-full cursor-pointer">
+                    <a href={`/${locale}/dashboard`} className="w-full cursor-pointer flex items-center">
                       <LayoutDashboard className="mr-2 h-4 w-4" />
                       {t('nav.dashboard')}
-                    </Link>
+                    </a>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive">
                     <LogOut className="mr-2 h-4 w-4" />
@@ -196,12 +224,12 @@ export default function Navbar() {
               </DropdownMenu>
             ) : (
               <div className="hidden sm:flex items-center gap-2">
-                <Link href="/auth/login">
+                <a href={`/${locale}/auth/login`}>
                   <Button variant="ghost" size="sm">{t('nav.login')}</Button>
-                </Link>
-                <Link href="/auth/register">
+                </a>
+                <a href={`/${locale}/auth/register`}>
                   <Button size="sm">{t('nav.register')}</Button>
-                </Link>
+                </a>
               </div>
             )}
 
@@ -213,35 +241,43 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent side={locale === 'ar' ? 'left' : 'right'} className="w-80">
                 <div className="flex flex-col gap-4 mt-8">
-                  <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                  <a href={`/${locale}`} onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">{t('nav.home')}</Button>
-                  </Link>
+                  </a>
                   {services.map((service) => (
-                    <Link key={service.href} href={service.href} onClick={() => setIsMobileMenuOpen(false)}>
+                    <a key={service.href} href={getLocalizedPath(service.href)} onClick={() => setIsMobileMenuOpen(false)}>
                       <Button variant="ghost" className="w-full justify-start">{t(service.label)}</Button>
-                    </Link>
+                    </a>
                   ))}
-                  <Link href="/pricing" onClick={() => setIsMobileMenuOpen(false)}>
+                  <a href={`/${locale}/pricing`} onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">{t('nav.pricing')}</Button>
-                  </Link>
-                  <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+                  </a>
+                  <a href={`/${locale}/contact`} onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">{t('nav.contact')}</Button>
-                  </Link>
+                  </a>
                   <div className="border-t pt-4 mt-4 flex gap-2">
                     {locales.map((loc) => (
-                      <Button key={loc} variant={locale === loc ? 'default' : 'outline'} size="sm" onClick={() => { router.push(pathname, { locale: loc }); setIsMobileMenuOpen(false); }}>
+                      <Button
+                        key={loc}
+                        variant={locale === loc ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => {
+                          switchLanguage(loc);
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
                         {localeNames[loc]}
                       </Button>
                     ))}
                   </div>
                   {user ? (
                     <>
-                      <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                      <a href={`/${locale}/dashboard`} onClick={() => setIsMobileMenuOpen(false)}>
                         <Button variant="ghost" className="w-full justify-start">
                           <LayoutDashboard className="mr-2 h-4 w-4" />
                           {t('nav.dashboard')}
                         </Button>
-                      </Link>
+                      </a>
                       <Button variant="ghost" className="w-full justify-start text-destructive" onClick={handleLogout}>
                         <LogOut className="mr-2 h-4 w-4" />
                         {t('nav.logout')}
@@ -249,12 +285,12 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Link href="/auth/login" onClick={() => setIsMobileMenuOpen(false)}>
+                      <a href={`/${locale}/auth/login`} onClick={() => setIsMobileMenuOpen(false)}>
                         <Button variant="ghost" className="w-full">{t('nav.login')}</Button>
-                      </Link>
-                      <Link href="/auth/register" onClick={() => setIsMobileMenuOpen(false)}>
+                      </a>
+                      <a href={`/${locale}/auth/register`} onClick={() => setIsMobileMenuOpen(false)}>
                         <Button className="w-full mt-2">{t('nav.register')}</Button>
-                      </Link>
+                      </a>
                     </>
                   )}
                 </div>

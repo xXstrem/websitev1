@@ -1,8 +1,8 @@
 'use client';
 
-import { Link } from '@/i18n/routing';
+import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
-import { Server, Twitter, Github, Linkedin, MessageCircle } from 'lucide-react';
+import { Server, Twitter, Github, MessageCircle } from 'lucide-react';
 
 const footerLinks = {
   services: [
@@ -22,22 +22,28 @@ const footerLinks = {
   legal: [
     { href: '/terms', label: 'legal.terms' },
     { href: '/privacy', label: 'legal.privacy' },
+    { href: '/refund', label: 'legal.refund' },
   ],
 };
 
 export default function Footer() {
   const t = useTranslations();
+  const locale = useLocale();
   const currentYear = new Date().getFullYear();
+
+  const getLocalizedPath = (path: string) => {
+    return `/${locale}${path.startsWith('/') ? path : '/' + path}`;
+  };
 
   return (
     <footer className="bg-muted/30 border-t">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
+            <a href={`/${locale}`} className="flex items-center gap-2 mb-4">
               <Server className="h-8 w-8" />
               <span className="text-xl font-bold">{t('common.appName')}</span>
-            </Link>
+            </a>
             <p className="text-muted-foreground max-w-md mb-6">{t('footer.description')}</p>
             <div className="flex items-center gap-4">
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -57,9 +63,9 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <a href={getLocalizedPath(link.href)} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {t(link.label)}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -70,9 +76,9 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <a href={getLocalizedPath(link.href)} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {t(link.label)}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -83,9 +89,9 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <a href={getLocalizedPath(link.href)} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {t(link.label)}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
