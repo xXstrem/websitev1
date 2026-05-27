@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Check, Server, Monitor, Cloud, Globe, Gamepad2, Lock, ShoppingCart } from 'lucide-react';
+import { Check, Server, Monitor, Cloud, Globe, Gamepad2, Lock, ShoppingCart, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase/client';
 
@@ -29,7 +29,7 @@ interface ServiceConfig {
   title: string;
   description: string;
   plans: Plan[];
-  billingCycle: 'month' | 'year';
+  billingCycle: 'monthly' | 'annually';
   configFields: string[];
 }
 
@@ -38,7 +38,7 @@ const serviceConfigs: Record<string, ServiceConfig> = {
     icon: Server,
     title: 'VPS Hosting',
     description: 'High-performance virtual private servers with dedicated resources',
-    billingCycle: 'month',
+    billingCycle: 'monthly',
     configFields: ['hostname', 'os', 'location'],
     plans: [
       { name: 'VPS-4', price: 15000, specs: { cpu: '1 Core', ram: '4 GB', storage: '50 GB NVMe', bandwidth: '2 TB' }, features: ['DDoS Protection', 'Full Root Access', '24/7 Support', 'Weekly Backups'] },
@@ -51,7 +51,7 @@ const serviceConfigs: Record<string, ServiceConfig> = {
     icon: Monitor,
     title: 'Dedicated Servers',
     description: 'Bare metal performance for your most demanding workloads',
-    billingCycle: 'month',
+    billingCycle: 'monthly',
     configFields: ['hostname', 'os', 'raid'],
     plans: [
       { name: 'DED-16', price: 120000, specs: { cpu: 'Intel Xeon E3', ram: '16 GB', storage: '2x500GB SSD', bandwidth: '10 Gbps' }, features: ['IPMI Access', '24/7 Support', 'DDoS Protection'] },
@@ -63,7 +63,7 @@ const serviceConfigs: Record<string, ServiceConfig> = {
     icon: Cloud,
     title: 'Shared Hosting',
     description: 'Affordable hosting perfect for small websites',
-    billingCycle: 'month',
+    billingCycle: 'monthly',
     configFields: ['domain'],
     plans: [
       { name: 'Starter', price: 4500, specs: { storage: '5 GB', bandwidth: '50 GB' }, features: ['cPanel', 'Free SSL', '1 Website', '5 Emails'] },
@@ -75,7 +75,7 @@ const serviceConfigs: Record<string, ServiceConfig> = {
     icon: Globe,
     title: 'Domain Registration',
     description: 'Find your perfect domain name',
-    billingCycle: 'year',
+    billingCycle: 'annually',
     configFields: ['domain'],
     plans: [
       { name: '.com', price: 15000, features: ['DNS Management', 'WHOIS Privacy Available'] },
@@ -88,7 +88,7 @@ const serviceConfigs: Record<string, ServiceConfig> = {
     icon: Gamepad2,
     title: 'Game Server Hosting',
     description: 'Low-latency servers for the ultimate gaming experience',
-    billingCycle: 'month',
+    billingCycle: 'monthly',
     configFields: ['hostname', 'game', 'slots'],
     plans: [
       { name: 'Starter', price: 9000, specs: { cpu: '2 vCPU', ram: '4 GB', storage: '50 GB NVMe' }, features: ['10 Slots', 'DDoS Protection', 'Instant Setup', 'Control Panel'] },
@@ -100,7 +100,7 @@ const serviceConfigs: Record<string, ServiceConfig> = {
     icon: Lock,
     title: 'SSL Certificates',
     description: 'Secure your website with trusted SSL certificates',
-    billingCycle: 'year',
+    billingCycle: 'annually',
     configFields: ['domain'],
     plans: [
       { name: 'Basic SSL', price: 15000, features: ['Domain Validation', 'Quick Issuance', '99.9% Recognition'] },
@@ -118,6 +118,7 @@ export default function OrderPage() {
 
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [config, setConfig] = useState<Record<string, string>>({});
 
@@ -127,17 +128,31 @@ export default function OrderPage() {
   const service = serviceConfigs[serviceType];
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user);
+      setAuthLoading(false);
+
       if (!session?.user) {
         router.push('/auth/login');
+        return;
       }
-    });
 
-    if (planName && service) {
-      setSelectedPlan(planName);
-    }
+      if (planName && service) {
+        setSelectedPlan(planName);
+      }
+    };
+
+    checkAuth();
   }, [planName, service, router]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   if (!service) {
     return (
@@ -158,25 +173,81 @@ export default function OrderPage() {
   }
 
   const Icon = service.icon;
-  const plan = service.plans.find(p => p.name === selectedPlan);
+  const plan = service.plans.find(p => p.name.toLowerCase().replace(' ', '-') === selectedPlan?.toLowerCase().replace(' ', '-') || p.name === selectedPlan);
 
   const handleOrder = async () => {
-    if (!selectedPlan || !user) return;
+    if (!selectedPlan || !user) {
+      toast({
+        title: t('common.error'),
+        description: 'Please select a plan and ensure you are logged in.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const { error } = await supabase.from('orders').insert({
-        user_id: user.id,
-        service_type: serviceType,
-        plan_name: selectedPlan,
-        amount: plan?.price || 0,
-        currency: 'IQD',
-        billing_cycle: service.billingCycle,
-        configuration: config,
-        status: 'pending',
-      });
+      // Get or create a default product for this service type
+      let product: any = null;
+      const { data: existingProducts } = await supabase
+        .from('products')
+        .select('id')
+        .eq('slug', serviceType)
+        .limit(1);
 
-      if (error) throw error;
+      if (existingProducts && existingProducts.length > 0) {
+        product = existingProducts[0];
+      } else {
+        // Create product if doesn't exist
+        const { data: newProduct, error: productError } = await supabase
+          .from('products')
+          .insert({
+            category_id: null,
+            name: { en: service.title, ar: service.title },
+            slug: serviceType,
+            description: { en: service.description, ar: service.description },
+            price: plan?.price || 0,
+            billing_cycle: service.billingCycle,
+            is_active: true,
+          })
+          .select('id')
+          .single();
+
+        if (productError) throw productError;
+        product = newProduct;
+      }
+
+      // Create the order
+      const { error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          product_id: product.id,
+          amount: plan?.price || 0,
+          currency: 'IQD',
+          billing_cycle: service.billingCycle,
+          notes: JSON.stringify({
+            plan_name: selectedPlan,
+            service_type: serviceType,
+            configuration: config,
+          }),
+          status: 'pending',
+        });
+
+      if (orderError) throw orderError;
+
+      // Create invoice
+      const { error: invoiceError } = await supabase
+        .from('invoices')
+        .insert({
+          user_id: user.id,
+          amount: plan?.price || 0,
+          currency: 'IQD',
+          status: 'pending',
+          due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        });
+
+      if (invoiceError) console.error('Invoice creation failed:', invoiceError);
 
       toast({
         title: t('common.success'),
@@ -185,6 +256,7 @@ export default function OrderPage() {
 
       router.push('/dashboard/orders');
     } catch (error: any) {
+      console.error('Order error:', error);
       toast({
         title: t('common.error'),
         description: error.message || t('errors.generic'),
@@ -254,7 +326,7 @@ export default function OrderPage() {
                           )}
                           <div className="mt-3">
                             <span className="text-2xl font-bold">{p.price.toLocaleString()}</span>
-                            <span className="text-muted-foreground"> IQD/{service.billingCycle}</span>
+                            <span className="text-muted-foreground"> IQD/{service.billingCycle === 'monthly' ? 'month' : 'year'}</span>
                           </div>
                           <div className="mt-2 flex flex-wrap gap-1">
                             {p.features.slice(0, 2).map((f) => (
@@ -432,7 +504,7 @@ export default function OrderPage() {
                     <div className="border-t pt-4">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Billing</span>
-                        <span>Per {service.billingCycle}</span>
+                        <span>Per {service.billingCycle === 'monthly' ? 'month' : 'year'}</span>
                       </div>
                     </div>
                     <div className="border-t pt-4">
@@ -457,7 +529,14 @@ export default function OrderPage() {
                       disabled={!selectedPlan || loading}
                       onClick={handleOrder}
                     >
-                      {loading ? t('common.loading') : 'Place Order'}
+                      {loading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        'Place Order'
+                      )}
                     </Button>
                     <p className="text-xs text-center text-muted-foreground">
                       Payment will be processed manually after order submission

@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link } from '@/i18n/routing';
-import { useRouter } from '@/i18n/routing';
+import { Link, useRouter, usePathname } from '@/i18n/routing';
 import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -51,6 +50,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -164,7 +164,7 @@ export default function Navbar() {
                 {locales.map((loc) => (
                   <DropdownMenuItem
                     key={loc}
-                    onClick={() => router.push('/', { locale: loc })}
+                    onClick={() => router.push(pathname, { locale: loc })}
                     className={locale === loc ? 'bg-accent' : ''}
                   >
                     {localeNames[loc]}
@@ -229,7 +229,7 @@ export default function Navbar() {
                   </Link>
                   <div className="border-t pt-4 mt-4 flex gap-2">
                     {locales.map((loc) => (
-                      <Button key={loc} variant={locale === loc ? 'default' : 'outline'} size="sm" onClick={() => { router.push('/', { locale: loc }); setIsMobileMenuOpen(false); }}>
+                      <Button key={loc} variant={locale === loc ? 'default' : 'outline'} size="sm" onClick={() => { router.push(pathname, { locale: loc }); setIsMobileMenuOpen(false); }}>
                         {localeNames[loc]}
                       </Button>
                     ))}
