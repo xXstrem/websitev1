@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Link, useRouter } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
+import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,10 +12,43 @@ import { toast } from 'sonner';
 import { Loader2, Mail, Lock, Server } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
+const translations = {
+  en: {
+    title: 'Welcome back',
+    subtitle: 'Sign in to your account',
+    email: 'Email',
+    password: 'Password',
+    remember: 'Remember me',
+    forgot: 'Forgot password?',
+    button: 'Sign In',
+    noAccount: "Don't have an account?",
+    register: 'Create account',
+    appName: 'Ton Cloud',
+    success: 'Success',
+    error: 'Error',
+  },
+  ar: {
+    title: 'مرحباً بعودتك',
+    subtitle: 'سجل الدخول إلى حسابك',
+    email: 'البريد الإلكتروني',
+    password: 'كلمة المرور',
+    remember: 'تذكرني',
+    forgot: 'نسيت كلمة المرور؟',
+    button: 'تسجيل الدخول',
+    noAccount: 'ليس لديك حساب؟',
+    register: 'إنشاء حساب',
+    appName: 'تون كلاود',
+    success: 'تم بنجاح',
+    error: 'حدث خطأ',
+  },
+};
+
 export default function LoginPage() {
-  const t = useTranslations('auth.login');
-  const tCommon = useTranslations('common');
+  const params = useParams();
   const router = useRouter();
+  const locale = params.locale as string || 'en';
+  const t = translations[locale as keyof typeof translations] || translations.en;
+
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -36,10 +68,10 @@ export default function LoginPage() {
 
       if (error) throw error;
 
-      toast.success(tCommon('success'));
-      router.push('/dashboard');
+      toast.success(t.success);
+      router.push(`/${locale}/dashboard`);
     } catch (error: any) {
-      toast.error(error.message || tCommon('error'));
+      toast.error(error.message || t.error);
     } finally {
       setIsLoading(false);
     }
@@ -54,25 +86,25 @@ export default function LoginPage() {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
+          <a href={`/${locale}`} className="inline-flex items-center gap-2 mb-6">
             <Server className="h-8 w-8" />
-            <span className="text-xl font-bold">{tCommon('appName')}</span>
-          </Link>
+            <span className="text-xl font-bold">{t.appName}</span>
+          </a>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">
-              {t('title')}
+              {t.title}
             </CardTitle>
             <CardDescription className="text-center">
-              {t('subtitle')}
+              {t.subtitle}
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">{t('email')}</Label>
+                <Label htmlFor="email">{t.email}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground rtl:right-3 rtl:left-auto" />
                   <Input
@@ -92,13 +124,13 @@ export default function LoginPage() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">{t('password')}</Label>
-                  <Link
-                    href="/auth/forgot-password"
+                  <Label htmlFor="password">{t.password}</Label>
+                  <a
+                    href={`/${locale}/auth/forgot-password`}
                     className="text-sm text-muted-foreground hover:text-foreground"
                   >
-                    {t('forgot')}
-                  </Link>
+                    {t.forgot}
+                  </a>
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground rtl:right-3 rtl:left-auto" />
@@ -126,7 +158,7 @@ export default function LoginPage() {
                   }
                 />
                 <Label htmlFor="remember" className="text-sm font-normal">
-                  {t('remember')}
+                  {t.remember}
                 </Label>
               </div>
             </CardContent>
@@ -134,17 +166,17 @@ export default function LoginPage() {
             <CardFooter className="flex flex-col gap-4">
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {t('button')}
+                {t.button}
               </Button>
 
               <p className="text-sm text-center text-muted-foreground">
-                {t('noAccount')}{' '}
-                <Link
-                  href="/auth/register"
+                {t.noAccount}{' '}
+                <a
+                  href={`/${locale}/auth/register`}
                   className="font-medium text-foreground hover:underline"
                 >
-                  {t('register')}
-                </Link>
+                  {t.register}
+                </a>
               </p>
             </CardFooter>
           </form>

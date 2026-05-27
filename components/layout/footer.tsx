@@ -1,7 +1,6 @@
 'use client';
 
-import { useLocale } from 'next-intl';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { Server, Twitter, Github, MessageCircle } from 'lucide-react';
 
 const footerLinks = {
@@ -15,10 +14,6 @@ const footerLinks = {
     { href: '/about', label: 'nav.about' },
     { href: '/contact', label: 'nav.contact' },
   ],
-  support: [
-    { href: '/faq', label: 'nav.faq' },
-    { href: '/contact', label: 'nav.contact' },
-  ],
   legal: [
     { href: '/terms', label: 'legal.terms' },
     { href: '/privacy', label: 'legal.privacy' },
@@ -27,8 +22,7 @@ const footerLinks = {
 };
 
 export default function Footer() {
-  const t = useTranslations();
-  const locale = useLocale();
+  const { locale, t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   const getLocalizedPath = (path: string) => {

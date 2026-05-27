@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useLocale } from 'next-intl';
-import { useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,7 +28,6 @@ import {
   Sun,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { locales, localeNames, type Locale } from '@/i18n/config';
 import { supabase } from '@/lib/supabase/client';
 
 const services = [
@@ -40,10 +39,16 @@ const services = [
   { href: 'ssl', label: 'nav.ssl' },
 ];
 
+const languages = [
+  { code: 'en' as const, name: 'English', flag: '🇺🇸' },
+  { code: 'ar' as const, name: 'العربية', flag: '🇮🇶' },
+];
+
 export default function Navbar() {
-  const t = useTranslations();
-  const locale = useLocale() as Locale;
+  const { locale, setLocale, t } = useLanguage();
   const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -78,14 +83,12 @@ export default function Navbar() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(null);
-    window.location.href = `/${locale}`;
+    router.push(`/${locale}`);
   };
 
-  const switchLanguage = (newLocale: string) => {
-    const currentPath = window.location.pathname;
-    // Remove the current locale prefix and add the new one
-    const pathWithoutLocale = currentPath.replace(/^\/(en|ar)/, '') || '/';
-    window.location.href = `/${newLocale}${pathWithoutLocale}`;
+  const handleLanguageChange = (newLocale: 'en' | 'ar') => {
+    setLocale(newLocale);
+    setIsMobileMenuOpen(false);
   };
 
   const getLocalizedPath = (path: string) => {
@@ -184,18 +187,20 @@ export default function Navbar() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="hidden sm:flex">
-                  <Globe className="h-5 w-5" />
+                <Button variant="ghost" className="gap-2 hidden sm:flex">
+                  <Globe className="h-4 w-4" />
+                  <span className="text-sm">{locale === 'ar' ? 'عربي' : 'EN'}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                {locales.map((loc) => (
+                {languages.map((lang) => (
                   <DropdownMenuItem
-                    key={loc}
-                    onClick={() => switchLanguage(loc)}
-                    className={locale === loc ? 'bg-accent' : ''}
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className={locale === lang.code ? 'bg-accent' : ''}
                   >
-                    {localeNames[loc]}
+                    <span className="mr-2">{lang.flag}</span>
+                    {lang.name}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -255,21 +260,25 @@ export default function Navbar() {
                   <a href={`/${locale}/contact`} onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">{t('nav.contact')}</Button>
                   </a>
-                  <div className="border-t pt-4 mt-4 flex gap-2">
-                    {locales.map((loc) => (
-                      <Button
-                        key={loc}
-                        variant={locale === loc ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => {
-                          switchLanguage(loc);
-                          setIsMobileMenuOpen(false);
-                        }}
-                      >
-                        {localeNames[loc]}
-                      </Button>
-                    ))}
+
+                  <div className="border-t pt-4 mt-4">
+                    <p className="text-sm text-muted-foreground mb-2">{locale === 'ar' ? 'اللغة' : 'Language'}</p>
+                    <div className="flex gap-2">
+                      {languages.map((lang) => (
+                        <Button
+                          key={lang.code}
+                          variant={locale === lang.code ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => handleLanguageChange(lang.code)}
+                          className="flex-1"
+                        >
+                          <span className="mr-1">{lang.flag}</span>
+                          {lang.code === 'ar' ? 'عربي' : 'EN'}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
+
                   {user ? (
                     <>
                       <a href={`/${locale}/dashboard`} onClick={() => setIsMobileMenuOpen(false)}>

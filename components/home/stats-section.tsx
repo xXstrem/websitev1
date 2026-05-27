@@ -1,15 +1,32 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 const stats = [
-  { key: 'servers', value: 5000, suffix: '+' },
-  { key: 'customers', value: 10000, suffix: '+' },
-  { key: 'countries', value: 15, suffix: '' },
-  { key: 'uptime', value: 99.9, suffix: '%' },
+  { key: 'servers', valueEn: '5,000+', valueAr: '5,000+' },
+  { key: 'customers', valueEn: '10,000+', valueAr: '10,000+' },
+  { key: 'countries', valueEn: '15', valueAr: '15' },
+  { key: 'uptime', valueEn: '99.9%', valueAr: '99.9%' },
 ];
+
+const labels = {
+  en: {
+    title: 'Trusted by Companies Worldwide',
+    servers: 'Active Servers',
+    customers: 'Happy Customers',
+    countries: 'Data Centers',
+    uptime: 'Uptime',
+  },
+  ar: {
+    title: 'موثوق به من قبل الشركات حول العالم',
+    servers: 'خادم متصل',
+    customers: 'عميل سعيد',
+    countries: 'مركز بيانات',
+    uptime: 'وقت التشغيل',
+  },
+};
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   const [count, setCount] = useState(0);
@@ -37,7 +54,15 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function StatsSection() {
-  const t = useTranslations('home.stats');
+  const { locale } = useLanguage();
+  const lang = locale === 'ar' ? 'ar' : 'en';
+
+  const displayStats = [
+    { key: 'servers', display: stats[0].valueEn },
+    { key: 'customers', display: stats[1].valueEn },
+    { key: 'countries', display: stats[2].valueEn },
+    { key: 'uptime', display: stats[3].valueEn },
+  ];
 
   return (
     <section className="py-20 bg-foreground text-background">
@@ -48,11 +73,11 @@ export default function StatsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          {t('title')}
+          {labels[lang].title}
         </motion.h2>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {stats.map((stat, index) => (
+          {displayStats.map((stat, index) => (
             <motion.div
               key={stat.key}
               className="text-center"
@@ -62,9 +87,11 @@ export default function StatsSection() {
               transition={{ delay: index * 0.1 }}
             >
               <div className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                {stat.display}
               </div>
-              <div className="text-sm sm:text-base text-background/60">{t(stat.key)}</div>
+              <div className="text-sm sm:text-base text-background/60">
+                {labels[lang][stat.key as keyof typeof labels['en']]}
+              </div>
             </motion.div>
           ))}
         </div>

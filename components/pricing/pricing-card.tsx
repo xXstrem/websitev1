@@ -1,7 +1,6 @@
 'use client';
 
-import { Link } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/i18n/context';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -36,8 +35,15 @@ export default function PricingCard({
   href,
   specs,
 }: PricingCardProps) {
-  const t = useTranslations();
-  const tVps = useTranslations('vps');
+  const { locale } = useLanguage();
+
+  const cpuLabel = locale === 'ar' ? 'المعالج' : 'CPU';
+  const ramLabel = locale === 'ar' ? 'الذاكرة' : 'RAM';
+  const storageLabel = locale === 'ar' ? 'التخزين' : 'Storage';
+  const bandwidthLabel = locale === 'ar' ? 'النطاق الترددي' : 'Bandwidth';
+  const perMonth = locale === 'ar' ? '/شهر' : '/month';
+  const orderNow = locale === 'ar' ? 'اطلب الآن' : 'Order Now';
+  const popularLabel = locale === 'ar' ? 'الأكثر شعبية' : 'Popular';
 
   return (
     <motion.div
@@ -47,8 +53,8 @@ export default function PricingCard({
       transition={{ delay: index * 0.1 }}
       className="relative"
     >
-      {popular && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1">Popular</Badge>}
-      <Card className={`h-full flex flex-col hover-lift ${popular ? 'border-foreground dark:border-white shadow-lg' : ''}`}>
+      {popular && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1">{popularLabel}</Badge>}
+      <Card className={`h-full flex flex-col hover:shadow-lg transition-shadow ${popular ? 'border-foreground dark:border-white shadow-lg' : ''}`}>
         <CardHeader className="text-center">
           <div className="text-xl font-bold">{name}</div>
           <div className="text-sm text-muted-foreground">{description}</div>
@@ -58,25 +64,25 @@ export default function PricingCard({
           <div className="text-center">
             <div className="flex items-baseline justify-center gap-1">
               <span className="text-4xl font-bold">{price.toLocaleString()}</span>
-              <span className="text-muted-foreground">{currency}{t('common.perMonth')}</span>
+              <span className="text-muted-foreground">{currency}{perMonth}</span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="p-3 bg-muted rounded-lg">
-              <div className="text-muted-foreground">{tVps('specs.cpu')}</div>
+              <div className="text-muted-foreground">{cpuLabel}</div>
               <div className="font-semibold">{specs.cpu}</div>
             </div>
             <div className="p-3 bg-muted rounded-lg">
-              <div className="text-muted-foreground">{tVps('specs.ram')}</div>
+              <div className="text-muted-foreground">{ramLabel}</div>
               <div className="font-semibold">{specs.ram}</div>
             </div>
             <div className="p-3 bg-muted rounded-lg">
-              <div className="text-muted-foreground">{tVps('specs.storage')}</div>
+              <div className="text-muted-foreground">{storageLabel}</div>
               <div className="font-semibold">{specs.storage}</div>
             </div>
             <div className="p-3 bg-muted rounded-lg">
-              <div className="text-muted-foreground">{tVps('specs.bandwidth')}</div>
+              <div className="text-muted-foreground">{bandwidthLabel}</div>
               <div className="font-semibold">{specs.bandwidth}</div>
             </div>
           </div>
@@ -92,9 +98,9 @@ export default function PricingCard({
         </CardContent>
 
         <CardFooter>
-          <Link href={href} className="w-full">
-            <Button className="w-full" variant={popular ? 'default' : 'outline'}>{t('common.orderNow')}</Button>
-          </Link>
+          <a href={href} className="w-full">
+            <Button className="w-full" variant={popular ? 'default' : 'outline'}>{orderNow}</Button>
+          </a>
         </CardFooter>
       </Card>
     </motion.div>
